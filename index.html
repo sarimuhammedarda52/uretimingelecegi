@@ -114,6 +114,7 @@
             font-weight: 600;
             text-decoration: none;
             font-size: 14px;
+            white-space: nowrap;
         }
         
         .nav-links .join-btn-nav:hover {
@@ -208,6 +209,7 @@
             letter-spacing: 0.5px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
 
@@ -531,7 +533,11 @@
             }
         }
 
+        /* YENİ MOBİL UYUM KODLARI BURADA BAŞLIYOR */
         @media (max-width: 768px) {
+            .hero {
+                padding-top: 100px; /* Üstteki boşluğu daralttık */
+            }
             .hero h1 {
                 font-size: 2.2rem;
             }
@@ -539,10 +545,45 @@
                 flex: 0 0 280px;
             }
             .logo-container img {
-                height: 55px;
+                height: 45px;
             }
             nav.scrolled .logo-container img {
-                height: 45px;
+                height: 40px;
+            }
+            
+            /* Mobilde Hakkımızda Kutusunu Alt Alta Alıyoruz */
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+            
+            /* Kutu İçi Boşlukları Küçültüyoruz */
+            .section-wrapper {
+                padding: 80px 5%;
+            }
+            
+            /* Butonların Mobilde Alt Alta Gelmesi İçin */
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+                gap: 15px;
+            }
+            .btn {
+                width: 100%;
+            }
+            
+            /* Sosyal Medya İkonlarının Sıkışmaması İçin */
+            .nav-links {
+                gap: 15px;
+            }
+            .nav-links .join-btn-nav {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            .nav-icons a svg {
+                width: 18px;
+                height: 18px;
             }
         }
     </style>
