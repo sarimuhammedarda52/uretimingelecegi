@@ -326,14 +326,20 @@
             max-width: 800px;
         }
         
+        /* Navbar'daki logo ayarlarından bağımsız yeni taşıyıcı */
+        .fotm-hero-logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
         .fotm-logo-img {
-            height: 850px; /* LOGO DEvasa BOYUTA ÇIKARILDI */
+            height: 350px !important; /* Navbar logosuyla çakışmayı önlemek için !important eklendi */
             width: auto;
             max-width: 100%;
             object-fit: contain;
             mix-blend-mode: screen;
-            display: block;
-            margin: 0 auto;
         }
 
         /* FAALİYET KARTLARI */
@@ -574,7 +580,7 @@
             }
             
             .fotm-logo-img {
-                height: 220px; /* Mobilde çok taşırmasın ama yine de büyük dursun */
+                height: 220px !important; /* Mobilde çok taşırmasın ama yine de büyük dursun */
             }
             
             .section-wrapper {
@@ -681,7 +687,7 @@
                     <p><strong>FOT-M (Future of the Manufacturing)</strong>, Üretimin Geleceği Öğrenci Topluluğu'nun TEKNOFEST ve TÜBİTAK gibi platformlarda üniversitemizi temsil eden Endüstri 4.0 odaklı proje takımıdır. Vizyonumuz; akıllı imalat teknolojileri ve otomasyon sistemleri üzerine sahada birebir uygulanabilir, yenilikçi projeler geliştirmektir.</p>
                     <p>Teoriyi sanayi pratiğiyle birleştiren ekibimiz; sahadan veri toplayan, dijital ikiz senaryoları kurgulayan ve üretim sistemlerini optimize eden projelerle ülkemizin milli teknoloji hamlesine doğrudan katkı sağlamayı hedefler. Sadece tasarlayan değil, bizzat sahada kuran ve işleten bir kültürle hareket ediyoruz.</p>
                 </div>
-                 <div class="logo-container fade-in" style="justify-content: center; align-items: center; width: 100%;">
+                 <div class="fotm-hero-logo-container fade-in">
                     <img src="logo/fotmresim.png" alt="FOT-M Takım Logosu" class="fotm-logo-img">
                 </div>
             </div>
