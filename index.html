@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Üretimin Geleceği Öğrenci Topluluğu</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- GENEL DEĞİŞKENLER VE TASARIM AYARLARI --- */
+        :root {
+            --bg-color: #030303;
+            --bg-secondary: #0a0a0a;
+            --surface-color: #111111;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --border-color: #27272a;
+            --accent: #ffffff;
+            --accent-dim: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ARKA PLAN GLOW EFEKTİ */
+        .bg-glow {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0) 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- NAVBAR TASARIMI --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 25px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(3, 3, 3, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 5%;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container img {
+            height: 110px; /* LOGO KÜÇÜLTÜLDÜ (150px -> 110px) */
+            width: auto;
+            border-radius: 4px;
+            transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        nav.scrolled .logo-container img {
+            height: 70px; /* SCROLLED LOGO KÜÇÜLTÜLDÜ (90px -> 70px) */
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links > a.text-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links > a.text-link:hover {
+            color: var(--accent);
+        }
+
+        .nav-links .join-btn-nav {
+            background-color: var(--accent);
+            color: var(--bg-color);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .nav-links .join-btn-nav:hover {
+            background-color: #e0e0e0;
+            color: var(--bg-color);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 15px;
+            margin-left: 10px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 20px;
+            align-items: center;
+        }
+
+        .nav-icons a {
+            color: var(--text-muted);
+        }
+
+        .nav-icons a:hover {
+            color: var(--accent);
+        }
+
+        .nav-icons a svg {
+            width: 20px;
+            height: 20px;
+            transition: stroke 0.3s;
+        }
+
+        /* --- HERO (GİRİŞ) BÖLÜMÜ --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 20px; 
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards 0.2s;
+        }
+
+        .hero .slogan {
+            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            color: var(--accent);
+            font-weight: 400;
+            margin-bottom: 30px;
+            letter-spacing: 0.01em;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards 0.4s;
+        }
+
+        .hero .desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            margin-bottom: 40px;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards 0.5s;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards 0.6s;
+        }
+
+        .btn {
+            padding: 16px 36px;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--bg-color);
+            border: 1px solid var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            background-color: var(--accent-dim);
+        }
+
+        /* --- GENEL BÖLÜM WRAPPERLARI --- */
+        .section-wrapper {
+            padding: 120px 5%;
+        }
+
+        .bg-darker {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .section-heading {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* HAKKIMIZDA BÖLÜMÜ (KURUMSAL KİMLİK) */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .mission-box {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+        
+        .mission-box:hover {
+            border-color: #444;
+        }
+
+        .mission-box h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        
+        .mission-box p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* FOT-M PROJE TAKIMI BÖLÜMÜ (YENİ, İDDİALI) */
+        #fotm-takimi .about-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        #fotm-takimi .about-text p {
+            max-width: 800px;
+        }
+
+        /* FAALİYET KARTLARI */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px 30px;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, #333, #666);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            border-color: #555;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        /* --- AKILLI HABER TASARIMI (CAROUSEL) --- */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+
+        .blog-grid.slider-mode {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 40px;
+        }
+        .blog-grid.slider-mode::-webkit-scrollbar { display: none; }
+
+        .blog-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .blog-card.visible { opacity: 1; transform: translateY(0); }
+
+        .slider-mode .blog-card {
+            flex: 0 0 350px;
+            scroll-snap-align: start;
+        }
+
+        .blog-card:hover { border-color: #555; transform: translateY(-5px); }
+
+        .blog-img {
+            height: 200px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .blog-content {
+            padding: 30px;
+        }
+
+        .blog-tag {
+            font-size: 0.75rem;
+            background: var(--bg-color);
+            padding: 4px 10px;
+            border-radius: 100px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: inline-block;
+            border: 1px solid var(--border-color);
+        }
+
+        .blog-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .blog-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        /* --- SLIDER OKLARI TASARIMI --- */
+        .slider-arrows {
+            display: none;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .slider-arrows button {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .slider-arrows button:hover {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+            transform: scale(1.05);
+        }
+
+        .slider-arrows button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* --- FOOTER TASARIMI (TEMİZLENDİ) --- */
+        footer {
+            padding: 60px 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-logo {
+            height: 80px; 
+            object-fit: contain;
+        }
+
+        .footer-bottom-text {
+            color: #71717a;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* ANİMASYONLAR VE MOBİL UYUM */
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .nav-links > a.text-link {
+                display: none; 
+            }
+            .nav-icons {
+                border-left: none;
+                padding-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .slider-mode .blog-card {
+                flex: 0 0 280px;
+            }
+            .logo-container img {
+                height: 70px;
+            }
+            nav.scrolled .logo-container img {
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <nav id="navbar">
+        <div class="logo-container">
+            <img src="logo/uretimingelecegilogo.png" alt="Üretimin Geleceği Logo">
+        </div>
+        <div class="nav-links">
+            <a href="#hero" class="text-link">Ana Sayfa</a>
+            <a href="#hakkimizda" class="text-link">Kurumsal Kimlik</a>
+            <a href="#photm-takimi" class="text-link">FOT-M Takımı</a>
+            <a href="#arge" class="text-link">Çalışma Alanları</a>
+            
+            <div class="nav-icons">
+                <a href="https://www.instagram.com/fotmresmi/" target="_blank" aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a href="https://www.linkedin.com/company/fotm-subu" target="_blank" aria-label="LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=futureofthemanufacturing@gmail.com" target="_blank" aria-label="E-posta">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </a>
+            </div>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf7tYTZ3Wy6WZc64zi3DsCpmwAchU1Be7CKoMNG221JLivJig/viewform?usp=dialog" target="_blank" class="join-btn-nav">Ekibe Katıl</a>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero">
+        <h1>ÜRETİMİN GELECEĞİ TOPLULUĞU</h1>
+        <p class="slogan">Üretimin Geleceği Bizim Elimizde</p>
+        <p class="desc">Sakarya Uygulamalı Bilimler Üniversitesi bünyesinde teorik bilgiyi pratiğe dönüştüren; Endüstri 4.0 ve otomasyon sistemleri odaklı projeler geliştiren öğrenci topluluğuyuz.</p>
+        
+        <div class="hero-buttons">
+            <a href="#hakkimizda" class="btn btn-primary">BİZİ TANIYIN</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf7tYTZ3Wy6WZc64zi3DsCpmwAchU1Be7CKoMNG221JLivJig/viewform?usp=dialog" target="_blank" class="btn btn-secondary">TOPLULUĞA KATIL</a>
+        </div>
+    </section>
+
+    <section id="hakkimizda" class="section-wrapper bg-darker">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text fade-in">
+                    <h2 class="section-title">HAKKIMIZDA</h2>
+                    <h3 class="section-heading" style="margin-bottom: 20px;">Kurumsal Kimlik</h3> <p><strong>Üretimin Geleceği Öğrenci Topluluğu</strong>, klasik öğrenci topluluğu kalıplarının ötesinde, sahada somut işler üreten gerçek bir teknoloji üssüdür. Amacımız, üniversitedeki teorik bilgiyi sanayi kültürüyle harmanlayıp, endüstriyel otomasyon ekosisteminde "çalışan, güvenilir ve yenilikçi" çözümler ortaya koymaktır.</p>
+                    <p>Biz, teoriyle pratiği birleştiren, disiplinli, araştırmacı ve sanayiye entegre bir mühendislik kültürü inşa ediyoruz. Topluluğumuz, her bir üyesine sadece teknik bilgi değil, aynı zamanda proje yönetimi, takım çalışması ve endüstriyel standartlara uygunluk disiplinini de kazandırır.</p> </div>
+                
+                <div class="about-missions fade-in">
+                    <div class="mission-box">
+                        <h4>Temel Amacımız</h4>
+                        <p>Öğrencilerimizin üretim teknolojileri, Endüstri 4.0 ve otomasyon sistemleri konularında akademik ve sosyal gelişimlerini sağlamak.</p>
+                    </div>
+                    <div class="mission-box">
+                        <h4>Hedefimiz</h4>
+                        <p>TEKNOFEST ve TÜBİTAK gibi mühendislik yarışmalarında üniversitemizi proje takımlarıyla temsil etmek.</p> </div>
+                    <div class="mission-box">
+                        <h4>Misyonumuz</h4>
+                        <p>Sektör temsilcileri ile öğrencileri bir araya getirerek üniversitemizde üretim kültürünü yaygınlaştırmak.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="fotm-takimi" class="section-wrapper">
+        <div class="container">
+            <div class="about-grid">
+                 <div class="about-text fade-in">
+                    <h2 class="section-title">PROJE TAKIMIMIZ</h2>
+                    <h3 class="section-heading" style="margin-bottom: 20px;">Endüstri 4.0 Proje Takımı: FOT-M</h3>
+                    <p><strong>FOT-M (Future of the Manufacturing)</strong>, Üretimin Geleceği Öğrenci Topluluğu'nun kalbinde yer alan, Türkiye'nin ilk Endüstri 4.0 ve akıllı imalat teknolojileri odaklı öğrenci proje takımıdır. Vizyonumuz, TEKNOFEST, TÜBİTAK gibi platformlarda ve endüstriyel sahalarda yenilikçi, uygulanabilir ve sürdürülebilir teknolojik çözümler üreterek ülkemizin milli teknoloji hamlesine katkı sağlamaktır.</p>
+                    <p>Akademik teoriyi sanayi pratiğiyle birleştiren bu disiplinli ekip, geleceğin mühendislerini ve teknoloji liderlerini bugünden yetiştirir. FOT-M, sahadan veri toplayan, dijital ikiz senaryoları kurgulayan ve yapay zeka destekli otonom sistemler geliştiren bir teknoloji üretim merkezidir.</p> </div>
+                 <div class="logo-container fade-in" style="justify-content: center; opacity: 0.2; pointer-events: none;">
+                    <img src="logo/fotmresim.png" alt="FOT-M Takım Logosu" style="height: 250px; width: auto; filter: grayscale(1);"> </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="arge" class="section-wrapper bg-darker"> <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">FAALİYETLERİMİZ</h2>
+                <h3 class="section-heading">Çalışma Alanlarımız</h3>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card fade-in">
+                    <h3>Ar-Ge ve Prototip</h3>
+                    <p>İmalat süreçlerinin optimizasyonu için IIoT mimarileri, dijital ikiz senaryoları ve yapay zeka destekli otonom sistem prototiplerinin tasarımı.</p>
+                </div>
+                <div class="card fade-in">
+                    <h3>İleri İmalat Teknolojileri</h3>
+                    <p>Eklemeli imalat, hassas CNC işleme ve robotik entegrasyon yöntemlerini kullanarak karmaşık mühendislik tasarımlarının fizikselleştirilmesi.</p>
+                </div>
+                <div class="card fade-in">
+                    <h3>Otomasyon ve Kodlama</h3>
+                    <p>Endüstriyel kontrol sistemleri mimarisi, PLC programlama ve üretim sahasından toplanan verilerin analitiği üzerinden süreç optimizasyonu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="section-wrapper" style="display: none;"> <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">GÜNCEL & MEDYA</h2>
+                <h3 class="section-heading">Son Gelişmeler</h3>
+                <p id="scrollHint" style="color:var(--text-muted); font-size: 11px; margin-top: 10px; display: none;">← Sağa sola kaydırın →</p>
+                
+                <div class="slider-arrows" id="sliderArrows">
+                    <button onclick="haberiKaydir(-1)" aria-label="Geri">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button onclick="haberiKaydir(1)" aria-label="İleri">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="blog-grid" id="blogGrid">
+                </div>
+        </div>
+    </section>
+
+    <footer>
+        <img src="logo/yeni_alt_logo.png" alt="SUBÜ ve Üretimin Geleceği Logo" class="footer-logo">
+        <div class="footer-bottom-text">
+            &copy; 2026 Üretimin Geleceği Öğrenci Topluluğu. Tüm hakları saklıdır.<br>
+            Sakarya Uygulamalı Bilimler Üniversitesi Üretimin Geleceği Öğrenci Topluluğu
+        </div>
+    </footer>
+
+    <script>
+        // HABER SLIDER KAYDIRMA FONKSİYONU
+        function haberiKaydir(yon) {
+            const grid = document.getElementById('blogGrid');
+            const kaydirmaMiktari = 375; // Kart genişliği + Gap
+            grid.scrollBy({ left: yon * kaydirmaMiktari, behavior: 'smooth' });
+        }
+
+        // NAVBAR KAYDIRMA EFEKTİ
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // FADE-IN ANİMASYONLARI
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // SUPABASE VERİ ÇEKME VE AKILLI GÖRÜNÜM MANTIĞI
+        document.addEventListener('DOMContentLoaded', async () => {
+            const blogSection = document.getElementById('blog');
+            const blogGrid = document.getElementById('blogGrid');
+            const scrollHint = document.getElementById('scrollHint');
+            const sliderArrows = document.getElementById('sliderArrows');
+            
+            // JİLET GİBİ URL VE ANAHTAR
+            const S_URL = "https://tzdpljzkzvejdaydcwwi.supabase.co/rest/v1/duyurular";
+            const S_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6ZHBsanprenZlamRheWRjd3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDc5MjEsImV4cCI6MjA5MjI4MzkyMX0.BkSThURX33Spc2Ir5CjLpGZeueJ0pN-ZuznARP64g4s"; 
+
+            try {
+                const res = await fetch(`${S_URL}?select=*&order=id.desc`, {
+                    headers: { "apikey": S_KEY, "Authorization": `Bearer ${S_KEY}` }
+                });
+                const duyurular = await res.json();
+
+                if (duyurular && duyurular.length > 0) {
+                    blogSection.style.display = 'block';
+                    blogGrid.innerHTML = ''; 
+
+                    // AKILLI KONTROL: 1'den fazla haber varsa Slider moduna geç
+                    if (duyurular.length > 1) {
+                        blogGrid.classList.add('slider-mode');
+                        
+                        // Ekran boyutuna göre okları veya "kaydırın" yazısını göster
+                        if (window.innerWidth <= 768) {
+                            scrollHint.style.display = 'block';
+                        } else {
+                            sliderArrows.style.display = 'flex';
+                        }
+                    }
+                    
+                    duyurular.forEach(duyuru => {
+                        const img = duyuru.gorsel 
+                            ? `<div class="blog-img" style="background-image: url('${duyuru.gorsel}')"></div>`
+                            : `<div class="blog-img"></div>`;
+
+                        blogGrid.innerHTML += `
+                            <article class="blog-card fade-in">
+                                ${img}
+                                <div class="blog-content">
+                                    <span class="blog-tag">${duyuru.etiket || 'Duyuru'}</span>
+                                    <h4 style="color:#fff; margin-bottom:10px;">${duyuru.baslik}</h4>
+                                    <p style="color:#a1a1aa; font-size:14px; font-weight:300;">${duyuru.metin}</p>
+                                </div>
+                            </article>`;
+                    });
+
+                    // Yeni eklenen kartları observer'a bağla
+                    document.querySelectorAll('.blog-card').forEach(el => observer.observe(el));
+                }
+            } catch (err) {
+                console.error("Haber çekme hatası:", err);
+            }
+        });
+    </script>
+</body>
+</html>
