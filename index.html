@@ -55,7 +55,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 25px 5%;
+            padding: 20px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -77,14 +77,15 @@
         }
 
         .logo-container img {
-            height: 110px; /* LOGO KÜÇÜLTÜLDÜ (150px -> 110px) */
+            height: 70px;
             width: auto;
             border-radius: 4px;
             transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            mix-blend-mode: screen;
         }
         
         nav.scrolled .logo-container img {
-            height: 70px; /* SCROLLED LOGO KÜÇÜLTÜLDÜ (90px -> 70px) */
+            height: 55px;
         }
 
         .nav-links {
@@ -151,23 +152,24 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 60px 20px; 
+            padding: 120px 20px 60px 20px;
             position: relative;
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-size: clamp(2rem, 5vw, 4.2rem);
             font-weight: 800;
-            letter-spacing: -0.04em;
-            line-height: 1;
-            margin-bottom: 15px;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            max-width: 1000px;
             opacity: 0;
             transform: translateY(30px);
             animation: fadeUp 1s ease forwards 0.2s;
         }
 
         .hero .slogan {
-            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
             color: var(--accent);
             font-weight: 400;
             margin-bottom: 30px;
@@ -310,7 +312,7 @@
             margin: 0;
         }
 
-        /* FOT-M PROJE TAKIMI BÖLÜMÜ (YENİ, İDDİALI) */
+        /* FOT-M PROJE TAKIMI BÖLÜMÜ */
         #fotm-takimi .about-text {
             display: flex;
             flex-direction: column;
@@ -486,7 +488,7 @@
             height: 20px;
         }
 
-        /* --- FOOTER TASARIMI (TEMİZLENDİ) --- */
+        /* --- FOOTER TASARIMI --- */
         footer {
             padding: 60px 5%;
             text-align: center;
@@ -502,6 +504,7 @@
         .footer-logo {
             height: 80px; 
             object-fit: contain;
+            mix-blend-mode: screen;
         }
 
         .footer-bottom-text {
@@ -530,16 +533,16 @@
 
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             .slider-mode .blog-card {
                 flex: 0 0 280px;
             }
             .logo-container img {
-                height: 70px;
+                height: 55px;
             }
             nav.scrolled .logo-container img {
-                height: 60px;
+                height: 45px;
             }
         }
     </style>
@@ -555,14 +558,14 @@
         <div class="nav-links">
             <a href="#hero" class="text-link">Ana Sayfa</a>
             <a href="#hakkimizda" class="text-link">Kurumsal Kimlik</a>
-            <a href="#photm-takimi" class="text-link">FOT-M Takımı</a>
+            <a href="#fotm-takimi" class="text-link">FOT-M Takımı</a>
             <a href="#arge" class="text-link">Çalışma Alanları</a>
             
             <div class="nav-icons">
-                <a href="https://www.instagram.com/fotmresmi/" target="_blank" aria-label="Instagram">
+                <a href="https://www.instagram.com/subuuretimingelecegi/" target="_blank" aria-label="Instagram">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
-                <a href="https://www.linkedin.com/company/fotm-subu" target="_blank" aria-label="LinkedIn">
+                <a href="https://www.linkedin.com/company/uretimingelecegi-subu/" target="_blank" aria-label="LinkedIn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                 </a>
                 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=futureofthemanufacturing@gmail.com" target="_blank" aria-label="E-posta">
@@ -589,8 +592,10 @@
             <div class="about-grid">
                 <div class="about-text fade-in">
                     <h2 class="section-title">HAKKIMIZDA</h2>
-                    <h3 class="section-heading" style="margin-bottom: 20px;">Kurumsal Kimlik</h3> <p><strong>Üretimin Geleceği Öğrenci Topluluğu</strong>, klasik öğrenci topluluğu kalıplarının ötesinde, sahada somut işler üreten gerçek bir teknoloji üssüdür. Amacımız, üniversitedeki teorik bilgiyi sanayi kültürüyle harmanlayıp, endüstriyel otomasyon ekosisteminde "çalışan, güvenilir ve yenilikçi" çözümler ortaya koymaktır.</p>
-                    <p>Biz, teoriyle pratiği birleştiren, disiplinli, araştırmacı ve sanayiye entegre bir mühendislik kültürü inşa ediyoruz. Topluluğumuz, her bir üyesine sadece teknik bilgi değil, aynı zamanda proje yönetimi, takım çalışması ve endüstriyel standartlara uygunluk disiplinini de kazandırır.</p> </div>
+                    <h3 class="section-heading" style="margin-bottom: 20px;">Kurumsal Kimlik</h3>
+                    <p><strong>Üretimin Geleceği Öğrenci Topluluğu</strong>, akademik teoriyi endüstriyel gerçeklikle buluşturan bir mühendislik platformudur. Kurumsal kimliğimiz; disiplin, sistemli çalışma ve teknolojik üretkenlik üzerine inşa edilmiştir.</p>
+                    <p>Klasik kalıpların ötesinde, üniversite ekosisteminde faaliyet gösteren profesyonel bir teknoloji üssü olarak konumlanıyoruz. Otomasyon ve akıllı üretim odağında, teorik altyapıyı sanayinin ihtiyaç duyduğu somut mühendislik çözümlerine dönüştürüyoruz.</p>
+                </div>
                 
                 <div class="about-missions fade-in">
                     <div class="mission-box">
@@ -599,7 +604,8 @@
                     </div>
                     <div class="mission-box">
                         <h4>Hedefimiz</h4>
-                        <p>TEKNOFEST ve TÜBİTAK gibi mühendislik yarışmalarında üniversitemizi proje takımlarıyla temsil etmek.</p> </div>
+                        <p>TEKNOFEST ve TÜBİTAK gibi mühendislik yarışmalarında üniversitemizi proje takımlarıyla temsil etmek.</p>
+                    </div>
                     <div class="mission-box">
                         <h4>Misyonumuz</h4>
                         <p>Sektör temsilcileri ile öğrencileri bir araya getirerek üniversitemizde üretim kültürünü yaygınlaştırmak.</p>
@@ -616,14 +622,17 @@
                     <h2 class="section-title">PROJE TAKIMIMIZ</h2>
                     <h3 class="section-heading" style="margin-bottom: 20px;">Endüstri 4.0 Proje Takımı: FOT-M</h3>
                     <p><strong>FOT-M (Future of the Manufacturing)</strong>, Üretimin Geleceği Öğrenci Topluluğu'nun kalbinde yer alan, Türkiye'nin ilk Endüstri 4.0 ve akıllı imalat teknolojileri odaklı öğrenci proje takımıdır. Vizyonumuz, TEKNOFEST, TÜBİTAK gibi platformlarda ve endüstriyel sahalarda yenilikçi, uygulanabilir ve sürdürülebilir teknolojik çözümler üreterek ülkemizin milli teknoloji hamlesine katkı sağlamaktır.</p>
-                    <p>Akademik teoriyi sanayi pratiğiyle birleştiren bu disiplinli ekip, geleceğin mühendislerini ve teknoloji liderlerini bugünden yetiştirir. FOT-M, sahadan veri toplayan, dijital ikiz senaryoları kurgulayan ve yapay zeka destekli otonom sistemler geliştiren bir teknoloji üretim merkezidir.</p> </div>
+                    <p>Akademik teoriyi sanayi pratiğiyle birleştiren bu disiplinli ekip, geleceğin mühendislerini ve teknoloji liderlerini bugünden yetiştirir. FOT-M, sahadan veri toplayan, dijital ikiz senaryoları kurgulayan ve yapay zeka destekli otonom sistemler geliştiren bir teknoloji üretim merkezidir.</p>
+                </div>
                  <div class="logo-container fade-in" style="justify-content: center; opacity: 0.2; pointer-events: none;">
-                    <img src="logo/fotmresim.png" alt="FOT-M Takım Logosu" style="height: 250px; width: auto; filter: grayscale(1);"> </div>
+                    <img src="logo/fotmresim.png" alt="FOT-M Takım Logosu" style="height: 250px; width: auto; filter: grayscale(1);">
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="arge" class="section-wrapper bg-darker"> <div class="container">
+    <section id="arge" class="section-wrapper bg-darker">
+        <div class="container">
             <div class="section-header fade-in">
                 <h2 class="section-title">FAALİYETLERİMİZ</h2>
                 <h3 class="section-heading">Çalışma Alanlarımız</h3>
@@ -646,7 +655,8 @@
         </div>
     </section>
 
-    <section id="blog" class="section-wrapper" style="display: none;"> <div class="container">
+    <section id="blog" class="section-wrapper" style="display: none;">
+        <div class="container">
             <div class="section-header fade-in">
                 <h2 class="section-title">GÜNCEL & MEDYA</h2>
                 <h3 class="section-heading">Son Gelişmeler</h3>
