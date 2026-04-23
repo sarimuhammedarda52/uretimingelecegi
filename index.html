@@ -318,12 +318,20 @@
         #fotm-takimi .about-text {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            align-items: flex-start;
+            text-align: left;
         }
         
         #fotm-takimi .about-text p {
             max-width: 800px;
+        }
+        
+        .fotm-logo-img {
+            height: 280px; /* LOGO BOYUTU BÜYÜTÜLDÜ */
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            mix-blend-mode: screen;
         }
 
         /* FAALİYET KARTLARI */
@@ -533,10 +541,10 @@
             }
         }
 
-        /* YENİ MOBİL UYUM KODLARI BURADA BAŞLIYOR */
+        /* MOBİL UYUM KODLARI */
         @media (max-width: 768px) {
             .hero {
-                padding-top: 100px; /* Üstteki boşluğu daralttık */
+                padding-top: 100px;
             }
             .hero h1 {
                 font-size: 2.2rem;
@@ -551,19 +559,26 @@
                 height: 40px;
             }
             
-            /* Mobilde Hakkımızda Kutusunu Alt Alta Alıyoruz */
+            /* Mobilde Kutuları Alt Alta Alıyoruz */
             .about-grid {
                 grid-template-columns: 1fr;
                 gap: 40px;
                 text-align: center;
             }
             
-            /* Kutu İçi Boşlukları Küçültüyoruz */
+            #fotm-takimi .about-text {
+                align-items: center;
+                text-align: center;
+            }
+            
+            .fotm-logo-img {
+                height: 200px; /* Mobilde biraz daha kibar dursun */
+            }
+            
             .section-wrapper {
                 padding: 80px 5%;
             }
             
-            /* Butonların Mobilde Alt Alta Gelmesi İçin */
             .hero-buttons {
                 flex-direction: column;
                 width: 100%;
@@ -573,7 +588,6 @@
                 width: 100%;
             }
             
-            /* Sosyal Medya İkonlarının Sıkışmaması İçin */
             .nav-links {
                 gap: 15px;
             }
@@ -666,7 +680,7 @@
                     <p>Teoriyi sanayi pratiğiyle birleştiren ekibimiz; sahadan veri toplayan, dijital ikiz senaryoları kurgulayan ve üretim sistemlerini optimize eden projelerle ülkemizin milli teknoloji hamlesine doğrudan katkı sağlamayı hedefler. Sadece tasarlayan değil, bizzat sahada kuran ve işleten bir kültürle hareket ediyoruz.</p>
                 </div>
                  <div class="logo-container fade-in" style="justify-content: center;">
-                    <img src="logo/fotmresim.png" alt="FOT-M Takım Logosu" style="height: 180px; width: auto; mix-blend-mode: screen;">
+                    <img src="logo/fotmresim.png" alt="FOT-M Takım Logosu" class="fotm-logo-img">
                 </div>
             </div>
         </div>
