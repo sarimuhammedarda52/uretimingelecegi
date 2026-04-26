@@ -21,7 +21,7 @@
         .content { flex: 1; padding: 40px; overflow-y: auto; background: #0a0a0a; }
         .haber-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .haber-card { background: #111; border: 1px solid #222; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; }
-        .gorsel-onizleme { width: 100%; height: 120px; background-size: cover; background-position: center; border-radius: 4px; margin-bottom: 15px; background-color: #050505; }
+        .gorsel-onizleme { width: 100%; height: 180px; background-size: contain; background-repeat: no-repeat; background-position: center; border-radius: 4px; margin-bottom: 15px; background-color: #050505; }
         
         .action-buttons { display: flex; gap: 10px; margin-top: auto; padding-top: 15px; }
         .btn-edit { flex: 1; padding: 8px; background: #003a66; color: #fff; border: 1px solid #005599; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
@@ -42,7 +42,7 @@
         <input type="text" id="baslik" placeholder="Başlık yazın...">
         
         <label>İçerik Metni</label>
-        <textarea id="metin" rows="5" placeholder="Haber metnini girin..."></textarea>
+        <textarea id="metin" rows="5" placeholder="Haber metnini girin... Slider (Kaydırmalı) haber yapmak istiyorsanız slaytları '---' ile ayırın."></textarea>
         
         <label>Görsel Yükle (Değiştirmek istemiyorsanız boş bırakın)</label>
         <input type="file" id="gorsel" accept="image/*">
