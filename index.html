@@ -424,7 +424,7 @@
             transition: 0.3s;
             opacity: 0;
             transform: translateY(20px);
-            cursor: pointer; /* Tıklanabilir olduğunu belli etmek için */
+            cursor: pointer;
         }
         .blog-card.visible { opacity: 1; transform: translateY(0); }
 
@@ -435,16 +435,15 @@
 
         .blog-card:hover { border-color: #555; transform: translateY(-5px); }
 
-        /* GÖRSEL BOYUTLARI VE SIĞDIRMA DÜZELTİLDİ */
         .blog-img {
-            height: 260px; /* Yükseklik artırıldı */
-            background: #050505; /* Kenarlarda boşluk kalırsa siyah dolsun diye değiştirildi */
+            height: 260px;
+            background: #050505;
             display: flex;
             align-items: center;
             justify-content: center;
             border-bottom: 1px solid var(--border-color);
             position: relative;
-            background-size: contain; /* Cover yerine contain yapıldı, logo/resim kırpılmaz */
+            background-size: contain; 
             background-repeat: no-repeat;
             background-position: center;
         }
@@ -476,7 +475,6 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             margin-bottom: 20px;
-            /* Kart önizlemesinde metni kısaltmak için */
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
@@ -540,6 +538,8 @@
             border: 1px solid var(--border-color);
             width: 90%;
             max-width: 800px;
+            max-height: 90vh; /* Ekrana sığması için */
+            overflow-y: auto; /* Uzun metinlerde aşağı kaydırma eklendi */
             border-radius: 12px;
             position: relative;
             padding: 40px;
@@ -611,80 +611,33 @@
 
         /* ANİMASYONLAR VE MOBİL UYUM */
         @keyframes fadeUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 1024px) {
-            .nav-links > a.text-link {
-                display: none; 
-            }
-            .nav-icons {
-                border-left: none;
-                padding-left: 0;
-            }
+            .nav-links > a.text-link { display: none; }
+            .nav-icons { border-left: none; padding-left: 0; }
         }
 
         /* MOBİL UYUM KODLARI */
         @media (max-width: 768px) {
-            .hero {
-                padding-top: 100px;
-            }
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            .slider-mode .blog-card {
-                flex: 0 0 280px;
-            }
-            .logo-container img {
-                height: 45px;
-            }
-            nav.scrolled .logo-container img {
-                height: 40px;
-            }
+            .hero { padding-top: 100px; }
+            .hero h1 { font-size: 2.2rem; }
+            .slider-mode .blog-card { flex: 0 0 280px; }
+            .logo-container img { height: 45px; }
+            nav.scrolled .logo-container img { height: 40px; }
             
-            /* Mobilde Kutuları Alt Alta Alıyoruz */
-            .about-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-                text-align: center;
-            }
+            .about-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            #fotm-takimi .about-text { align-items: center; text-align: center; }
+            .fotm-logo-img { height: 220px !important; }
+            .section-wrapper { padding: 80px 5%; }
             
-            #fotm-takimi .about-text {
-                align-items: center;
-                text-align: center;
-            }
+            .hero-buttons { flex-direction: column; width: 100%; gap: 15px; }
+            .btn { width: 100%; }
             
-            .fotm-logo-img {
-                height: 220px !important; /* Mobilde çok taşırmasın ama yine de büyük dursun */
-            }
-            
-            .section-wrapper {
-                padding: 80px 5%;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                width: 100%;
-                gap: 15px;
-            }
-            .btn {
-                width: 100%;
-            }
-            
-            .nav-links {
-                gap: 15px;
-            }
-            .nav-links .join-btn-nav {
-                font-size: 12px;
-                padding: 8px 12px;
-            }
-            .nav-icons a svg {
-                width: 18px;
-                height: 18px;
-            }
+            .nav-links { gap: 15px; }
+            .nav-links .join-btn-nav { font-size: 12px; padding: 8px 12px; }
+            .nav-icons a svg { width: 18px; height: 18px; }
 
             .modal-content { padding: 30px 15px; } 
             .swiper-slide { padding: 10px 10px 30px 10px; }
@@ -847,14 +800,19 @@
         let globalDuyurular = [];
         let swiperInstance = null;
 
-        // HABER SLIDER KAYDIRMA FONKSİYONU
+        // Haber Dışı Arkaplana (Siyah Alana) Tıklayınca Modalı Kapatma
+        document.getElementById('newsModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
+
         function haberiKaydir(yon) {
             const grid = document.getElementById('blogGrid');
-            const kaydirmaMiktari = 375; // Kart genişliği + Gap
+            const kaydirmaMiktari = 375;
             grid.scrollBy({ left: yon * kaydirmaMiktari, behavior: 'smooth' });
         }
 
-        // NAVBAR KAYDIRMA EFEKTİ
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) {
@@ -864,7 +822,6 @@
             }
         });
 
-        // FADE-IN ANİMASYONLARI
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -875,6 +832,19 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+        // Veri Çekme Format Çözücü Yardımcı Fonksiyon
+        function parseGorselData(gorselStr) {
+            if (!gorselStr) return { kapak: "", galeri: [] };
+            if (gorselStr.trim().startsWith('{')) {
+                try {
+                    return JSON.parse(gorselStr);
+                } catch(e) {
+                    return { kapak: gorselStr, galeri: [] };
+                }
+            }
+            return { kapak: gorselStr, galeri: [] }; // Eski düz metin formatına geriye dönük uyumluluk
+        }
+
         // HABER MODALI AÇMA FONKSİYONU
         function openModal(id) {
             const duyuru = globalDuyurular.find(d => d.id === id);
@@ -883,26 +853,36 @@
             const wrapper = document.getElementById('swiperWrapper');
             wrapper.innerHTML = '';
 
-            // Metni '---' işaretinden bölerek slaytlara ayırıyoruz
-            const slaytlar = duyuru.metin.split('---');
+            const pGorsel = parseGorselData(duyuru.gorsel);
             
-            slaytlar.forEach((slaytMetni, index) => {
-                // Sadece ilk slaytta resmi gösteriyoruz, diğerleri saf bilgi slaytı
-                const gorselHtml = (index === 0 && duyuru.gorsel) ? `<img src="${duyuru.gorsel}" style="width:100%; height:200px; object-fit:contain; margin-bottom:20px; border-radius:8px; background:#050505;">` : '';
-                const baslikHtml = index === 0 ? duyuru.baslik : 'Detaylar';
+            // Eğer galeri varsa sadece galeriyi kullan. 
+            // Eğer galeri yoksa (eski post) kapak resmini tek başına göster.
+            const imagesToUse = pGorsel.galeri && pGorsel.galeri.length > 0 ? pGorsel.galeri : (pGorsel.kapak ? [pGorsel.kapak] : []);
+            
+            const texts = duyuru.metin ? duyuru.metin.split('---') : [];
+            const slideCount = Math.max(texts.length, imagesToUse.length);
+
+            // Instagram benzeri slider kurgusu: Fotoğraflar ve textleri birleştir.
+            // Text bittiyse sadece foto, foto bittiyse sadece text kaymaya devam eder.
+            for (let i = 0; i < slideCount; i++) {
+                let textPart = texts[i] ? texts[i].trim() : '';
+                let imgPart = imagesToUse[i] ? imagesToUse[i] : '';
+                
+                const gorselHtml = imgPart ? `<img src="${imgPart}" style="width:100%; max-height:400px; object-fit:contain; margin-bottom:20px; border-radius:8px; background:#050505;">` : '';
+                const baslikHtml = i === 0 ? duyuru.baslik : (textPart ? 'Detaylar' : '');
+                const baslikTag = baslikHtml ? `<h3>${baslikHtml}</h3>` : '';
 
                 wrapper.innerHTML += `
                     <div class="swiper-slide">
                         ${gorselHtml}
-                        <h3>${baslikHtml}</h3>
-                        <p>${slaytMetni.trim()}</p>
+                        ${baslikTag}
+                        <p>${textPart}</p>
                     </div>
                 `;
-            });
+            }
 
             document.getElementById('newsModal').classList.add('active');
 
-            // Swiper'ı Başlat/Güncelle
             if(swiperInstance) swiperInstance.destroy();
             swiperInstance = new Swiper(".mySwiper", {
                 navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
@@ -911,19 +891,16 @@
             });
         }
 
-        // HABER MODALINI KAPATMA FONKSİYONU
         function closeModal() {
             document.getElementById('newsModal').classList.remove('active');
         }
 
-        // SUPABASE VERİ ÇEKME VE AKILLI GÖRÜNÜM MANTIĞI
         document.addEventListener('DOMContentLoaded', async () => {
             const blogSection = document.getElementById('blog');
             const blogGrid = document.getElementById('blogGrid');
             const scrollHint = document.getElementById('scrollHint');
             const sliderArrows = document.getElementById('sliderArrows');
             
-            // JİLET GİBİ URL VE ANAHTAR
             const S_URL = "https://tzdpljzkzvejdaydcwwi.supabase.co/rest/v1/duyurular";
             const S_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6ZHBsanprenZlamRheWRjd3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDc5MjEsImV4cCI6MjA5MjI4MzkyMX0.BkSThURX33Spc2Ir5CjLpGZeueJ0pN-ZuznARP64g4s"; 
 
@@ -932,17 +909,14 @@
                     headers: { "apikey": S_KEY, "Authorization": `Bearer ${S_KEY}` }
                 });
                 const duyurular = await res.json();
-                globalDuyurular = duyurular; // Modalda kullanmak için global'e kaydet
+                globalDuyurular = duyurular; 
 
                 if (duyurular && duyurular.length > 0) {
                     blogSection.style.display = 'block';
                     blogGrid.innerHTML = ''; 
 
-                    // AKILLI KONTROL: 1'den fazla haber varsa Slider moduna geç
                     if (duyurular.length > 1) {
                         blogGrid.classList.add('slider-mode');
-                        
-                        // Ekran boyutuna göre okları veya "kaydırın" yazısını göster
                         if (window.innerWidth <= 768) {
                             scrollHint.style.display = 'block';
                         } else {
@@ -951,14 +925,16 @@
                     }
                     
                     duyurular.forEach(duyuru => {
-                        const img = duyuru.gorsel 
-                            ? `<div class="blog-img" style="background-image: url('${duyuru.gorsel}')"></div>`
+                        const pGorsel = parseGorselData(duyuru.gorsel);
+                        // Kapak fotoğrafı yoksa 1. fotoğrafı kapak yap
+                        const gridCoverImg = pGorsel.kapak || (pGorsel.galeri.length > 0 ? pGorsel.galeri[0] : "");
+
+                        const img = gridCoverImg 
+                            ? `<div class="blog-img" style="background-image: url('${gridCoverImg}')"></div>`
                             : `<div class="blog-img"></div>`;
                         
-                        // Sadece ilk cümleyi önizlemede göstermek için temizle
-                        const onizlemeMetni = duyuru.metin.split('---')[0];
+                        const onizlemeMetni = duyuru.metin ? duyuru.metin.split('---')[0] : "";
 
-                        // Tıklanma olayı eklendi: onclick="openModal(${duyuru.id})"
                         blogGrid.innerHTML += `
                             <article class="blog-card fade-in" onclick="openModal(${duyuru.id})">
                                 ${img}
@@ -971,7 +947,6 @@
                             </article>`;
                     });
 
-                    // Yeni eklenen kartları observer'a bağla
                     document.querySelectorAll('.blog-card').forEach(el => observer.observe(el));
                 }
             } catch (err) {
