@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
     <style>
         /* --- GENEL DEĞİŞKENLER VE TASARIM AYARLARI --- */
         :root {
@@ -326,7 +328,6 @@
             max-width: 800px;
         }
         
-        /* Navbar'daki logo ayarlarından bağımsız yeni taşıyıcı */
         .fotm-hero-logo-container {
             display: flex;
             justify-content: center;
@@ -335,7 +336,7 @@
         }
 
         .fotm-logo-img {
-            height: 350px !important; /* Navbar logosuyla çakışmayı önlemek için !important eklendi */
+            height: 350px !important; 
             width: auto;
             max-width: 100%;
             object-fit: contain;
@@ -423,6 +424,7 @@
             transition: 0.3s;
             opacity: 0;
             transform: translateY(20px);
+            cursor: pointer; /* Tıklanabilir olduğunu belli etmek için */
         }
         .blog-card.visible { opacity: 1; transform: translateY(0); }
 
@@ -433,15 +435,17 @@
 
         .blog-card:hover { border-color: #555; transform: translateY(-5px); }
 
+        /* GÖRSEL BOYUTLARI VE SIĞDIRMA DÜZELTİLDİ */
         .blog-img {
-            height: 200px;
-            background: #1a1a1a;
+            height: 260px; /* Yükseklik artırıldı */
+            background: #050505; /* Kenarlarda boşluk kalırsa siyah dolsun diye değiştirildi */
             display: flex;
             align-items: center;
             justify-content: center;
             border-bottom: 1px solid var(--border-color);
             position: relative;
-            background-size: cover;
+            background-size: contain; /* Cover yerine contain yapıldı, logo/resim kırpılmaz */
+            background-repeat: no-repeat;
             background-position: center;
         }
 
@@ -472,6 +476,11 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             margin-bottom: 20px;
+            /* Kart önizlemesinde metni kısaltmak için */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         /* --- SLIDER OKLARI TASARIMI --- */
@@ -505,6 +514,75 @@
             width: 20px;
             height: 20px;
         }
+
+        /* --- MODAL (AÇILIR PENCERE) VE İÇ SWIPER TASARIMI --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 800px;
+            border-radius: 12px;
+            position: relative;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 10;
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover { color: var(--text-main); }
+        
+        .swiper-slide {
+            padding: 20px 40px 40px 40px;
+            color: var(--text-main);
+            text-align: left;
+        }
+        
+        .swiper-slide h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .swiper-slide p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        .swiper-button-next, .swiper-button-prev { color: var(--text-muted); }
+        .swiper-button-next:hover, .swiper-button-prev:hover { color: var(--accent); }
+        .swiper-pagination-bullet { background: var(--text-muted); }
+        .swiper-pagination-bullet-active { background: var(--accent); }
 
         /* --- FOOTER TASARIMI --- */
         footer {
@@ -607,6 +685,9 @@
                 width: 18px;
                 height: 18px;
             }
+
+            .modal-content { padding: 30px 15px; } 
+            .swiper-slide { padding: 10px 10px 30px 10px; }
         }
     </style>
 </head>
@@ -747,7 +828,25 @@
         </div>
     </footer>
 
+    <div id="newsModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper" id="swiperWrapper">
+                    </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script>
+        let globalDuyurular = [];
+        let swiperInstance = null;
+
         // HABER SLIDER KAYDIRMA FONKSİYONU
         function haberiKaydir(yon) {
             const grid = document.getElementById('blogGrid');
@@ -776,6 +875,47 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+        // HABER MODALI AÇMA FONKSİYONU
+        function openModal(id) {
+            const duyuru = globalDuyurular.find(d => d.id === id);
+            if(!duyuru) return;
+
+            const wrapper = document.getElementById('swiperWrapper');
+            wrapper.innerHTML = '';
+
+            // Metni '---' işaretinden bölerek slaytlara ayırıyoruz
+            const slaytlar = duyuru.metin.split('---');
+            
+            slaytlar.forEach((slaytMetni, index) => {
+                // Sadece ilk slaytta resmi gösteriyoruz, diğerleri saf bilgi slaytı
+                const gorselHtml = (index === 0 && duyuru.gorsel) ? `<img src="${duyuru.gorsel}" style="width:100%; height:200px; object-fit:contain; margin-bottom:20px; border-radius:8px; background:#050505;">` : '';
+                const baslikHtml = index === 0 ? duyuru.baslik : 'Detaylar';
+
+                wrapper.innerHTML += `
+                    <div class="swiper-slide">
+                        ${gorselHtml}
+                        <h3>${baslikHtml}</h3>
+                        <p>${slaytMetni.trim()}</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById('newsModal').classList.add('active');
+
+            // Swiper'ı Başlat/Güncelle
+            if(swiperInstance) swiperInstance.destroy();
+            swiperInstance = new Swiper(".mySwiper", {
+                navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+                pagination: { el: ".swiper-pagination", clickable: true },
+                spaceBetween: 30,
+            });
+        }
+
+        // HABER MODALINI KAPATMA FONKSİYONU
+        function closeModal() {
+            document.getElementById('newsModal').classList.remove('active');
+        }
+
         // SUPABASE VERİ ÇEKME VE AKILLI GÖRÜNÜM MANTIĞI
         document.addEventListener('DOMContentLoaded', async () => {
             const blogSection = document.getElementById('blog');
@@ -792,6 +932,7 @@
                     headers: { "apikey": S_KEY, "Authorization": `Bearer ${S_KEY}` }
                 });
                 const duyurular = await res.json();
+                globalDuyurular = duyurular; // Modalda kullanmak için global'e kaydet
 
                 if (duyurular && duyurular.length > 0) {
                     blogSection.style.display = 'block';
@@ -813,14 +954,19 @@
                         const img = duyuru.gorsel 
                             ? `<div class="blog-img" style="background-image: url('${duyuru.gorsel}')"></div>`
                             : `<div class="blog-img"></div>`;
+                        
+                        // Sadece ilk cümleyi önizlemede göstermek için temizle
+                        const onizlemeMetni = duyuru.metin.split('---')[0];
 
+                        // Tıklanma olayı eklendi: onclick="openModal(${duyuru.id})"
                         blogGrid.innerHTML += `
-                            <article class="blog-card fade-in">
+                            <article class="blog-card fade-in" onclick="openModal(${duyuru.id})">
                                 ${img}
                                 <div class="blog-content">
                                     <span class="blog-tag">${duyuru.etiket || 'Duyuru'}</span>
                                     <h4 style="color:#fff; margin-bottom:10px;">${duyuru.baslik}</h4>
-                                    <p style="color:#a1a1aa; font-size:14px; font-weight:300;">${duyuru.metin}</p>
+                                    <p style="color:#a1a1aa; font-size:14px; font-weight:300;">${onizlemeMetni}</p>
+                                    <span style="color:var(--accent); font-size:12px; font-weight:600; display:inline-block; margin-top:10px;">Devamını Oku ➔</span>
                                 </div>
                             </article>`;
                     });
