@@ -117,8 +117,14 @@
 
         async function duyurulariYukle() {
             try {
-                const res = await fetch(`${S_URL}?select=*&order=id.desc`, { headers });
+                // Sadece okuma için gereken temel anahtarları gönderiyoruz (index.html'deki gibi)
+                const okumaAyarlari = {
+                    headers: { "apikey": S_KEY, "Authorization": `Bearer ${S_KEY}` }
+                };
+
+                const res = await fetch(`${S_URL}?select=*&order=id.desc`, okumaAyarlari);
                 tumDuyurular = await res.json();
+
                 const listeDiv = document.getElementById('duyuruListesi');
                 listeDiv.innerHTML = tumDuyurular.length ? '' : '<p style="color:#666;">Henüz yayınlanmış bir haber yok.</p>';
 
@@ -139,7 +145,10 @@
                             </div>
                         </div>`;
                 });
-            } catch (e) { console.error("Yükleme hatası:", e); }
+            } catch (e) {
+                console.error("Yükleme hatası:", e);
+                alert("Haberler yüklenirken bir hata oluştu, konsolu kontrol edin.");
+            }
         }
 
         /* DOSYA YÜKLEME VE ÖNİZLEME MANTIĞI */
