@@ -397,7 +397,8 @@
 
         .board-img-wrapper {
             width: 100%;
-            height: 320px;
+            aspect-ratio: 4 / 5;
+            height: auto;
             background: #111; 
             overflow: hidden;
             display: flex;
@@ -410,7 +411,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: top;
+            object-position: 15%;
             transition: transform 0.5s ease, filter 0.5s ease;
             filter: grayscale(15%);
         }
