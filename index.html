@@ -937,7 +937,7 @@
                 <div class="board-top fade-in">
                     <div class="board-card founder-card">
                         <div class="board-img-wrapper">
-                            <img src="muhammedardasari_5.jpg" alt="Muhammed Arda Sarı">
+                            <img src="muhammedardasari.png" alt="Muhammed Arda Sarı">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Muhammed Arda Sarı</h4>
@@ -959,7 +959,7 @@
                     <!-- Emirhan -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
-                            <img src="emirhansenel_4.jpg" alt="Emirhan Şenel">
+                            <img src="emirhansenel.png" alt="Emirhan Şenel">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Emirhan Şenel</h4>
@@ -997,7 +997,7 @@
                     <!-- Mehmet -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
-                            <img src="mehmetceran_4.jpg" alt="Mehmet Ceran">
+                            <img src="mehmetceran.png" alt="Mehmet Ceran">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Mehmet Ceran</h4>
@@ -1122,22 +1122,19 @@
         function mailGonder(email) {
             // Cihazın mobil olup olmadığını kontrol et
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                // Mobildeyse cihazın orijinal mail uygulamasını (Apple Mail vb.) aç
+                // Mobildeyse cihazın orijinal mail uygulamasını (Apple Mail, vb.) aç
                 window.location.href = "mailto:" + email;
             } else {
-                // Bilgisayardaysa varsayılan uygulama hatası vermemesi için direkt Gmail'i aç
+                // Bilgisayardaysa direkt web tarayıcısında Gmail'in mail yazma ekranını aç
                 window.open("https://mail.google.com/mail/?view=cm&fs=1&to=" + email, "_blank");
             }
         }
-
-        let globalDuyurular = [];
-        let swiperInstance = null;
 
         // Hash'siz pürüzsüz kaydırma
         document.querySelectorAll('.smooth-scroll').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
-                if (href.startsWith('mailto:') || href.startsWith('http')) {
+                if (href.startsWith('mailto:') || href.startsWith('http') || href === '#') {
                     return; 
                 }
                 
