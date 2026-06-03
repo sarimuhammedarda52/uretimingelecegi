@@ -82,7 +82,7 @@
         const S_URL = "https://tzdpljzkzvejdaydcwwi.supabase.co/rest/v1/duyurular";
         const S_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6ZHBsanprenZlamRheWRjd3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDc5MjEsImV4cCI6MjA5MjI4MzkyMX0.BkSThURX33Spc2Ir5CjLpGZeueJ0pN-ZuznARP64g4s"; 
 
-        // Veri gönderirken (POST/PATCH) kullanacağımız başlıklar
+        // Veri gönderirken (POST/PATCH/DELETE) kullanacağımız başlıklar
         const gonderimAyarlari = { 
             "apikey": S_KEY, 
             "Authorization": `Bearer ${S_KEY}`, 
@@ -118,16 +118,13 @@
 
         async function duyurulariYukle() {
             try {
-                // Tarayıcının önbelleğini zorla kırıp güncel veriyi getirmesi için rastgele bir parametre ekliyoruz
-                const rastgeleSayi = new Date().getTime();
-
                 // Sadece veri çekerken (GET) kullanacağımız ayarlar
                 const okumaAyarlari = {
                     headers: { "apikey": S_KEY, "Authorization": `Bearer ${S_KEY}` },
-                    cache: "no-store" // Tarayıcıya kesin bir dille cache KULLANMA diyoruz
+                    cache: "no-store" // Tarayıcı önbelleğini kırmak için doğru yöntem
                 };
 
-                const res = await fetch(`${S_URL}?select=*&order=id.desc&nocache=${rastgeleSayi}`, okumaAyarlari);
+                const res = await fetch(`${S_URL}?select=*&order=id.desc`, okumaAyarlari);
                 tumDuyurular = await res.json();
 
                 const listeDiv = document.getElementById('duyuruListesi');
