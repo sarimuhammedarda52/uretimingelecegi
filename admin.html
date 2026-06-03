@@ -2,317 +2,1327 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Üretimin Geleceği | Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Üretimin Geleceği Topluluğu</title>
+    
+    <link rel="icon" id="favicon" type="image/png" href="logo/uretimingelecegilogo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
     <style>
-        body { background: #050505; color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; }
-        .sidebar { width: 450px; background: #111; padding: 40px; border-right: 1px solid #222; display: flex; flex-direction: column; overflow-y: auto; }
-        .sidebar h2 { margin-top: 0; font-size: 24px; margin-bottom: 5px; }
-        .status-text { color: #a1a1aa; font-size: 13px; margin-bottom: 30px; display: block; }
-        label { font-size: 11px; color: #a1a1aa; margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 1px; }
-        input[type="text"], textarea { width: 100%; padding: 12px; margin-bottom: 20px; background: #0a0a0a; border: 1px solid #333; color: white; border-radius: 6px; font-family: inherit; }
-        input[type="file"] { width: 100%; padding: 10px; margin-bottom: 10px; background: #0a0a0a; border: 1px dashed #444; color: #a1a1aa; border-radius: 6px; }
-        
-        .btn-submit { width: 100%; padding: 15px; background: #fff; color: #000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
-        .btn-submit:hover { background: #ccc; }
-        
-        .btn-cancel { width: 100%; padding: 15px; background: #333; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; display: none; }
-        .btn-cancel:hover { background: #444; }
+        /* --- GENEL DEĞİŞKENLER VE TASARIM AYARLARI --- */
+        :root {
+            --bg-color: #030303;
+            --bg-secondary: #0a0a0a;
+            --surface-color: #111111;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --border-color: #27272a;
+            --accent: #ffffff;
+            --accent-dim: rgba(255, 255, 255, 0.1);
+        }
 
-        .content { flex: 1; padding: 40px; overflow-y: auto; background: #0a0a0a; }
-        .haber-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .haber-card { background: #111; border: 1px solid #222; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; }
-        .gorsel-onizleme { width: 100%; height: 180px; background-size: contain; background-repeat: no-repeat; background-position: center; border-radius: 4px; margin-bottom: 15px; background-color: #050505; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ARKA PLAN GLOW EFEKTİ */
+        .bg-glow {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0) 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- NAVBAR TASARIMI --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(3, 3, 3, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 5%;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container img {
+            height: 70px;
+            width: auto;
+            border-radius: 4px;
+            transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            mix-blend-mode: screen;
+        }
         
-        .action-buttons { display: flex; gap: 10px; margin-top: auto; padding-top: 15px; }
-        .btn-edit { flex: 1; padding: 8px; background: #003a66; color: #fff; border: 1px solid #005599; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
-        .btn-edit:hover { background: #004a80; }
-        .btn-delete { flex: 1; padding: 8px; background: #4a0000; color: #fff; border: 1px solid #6a0000; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
-        .btn-delete:hover { background: #6a0000; }
+        nav.scrolled .logo-container img {
+            height: 55px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links > a.text-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links > a.text-link:hover {
+            color: var(--accent);
+        }
+
+        .nav-links .join-btn-nav {
+            background-color: var(--accent);
+            color: var(--bg-color);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+            white-space: nowrap;
+        }
         
-        /* Çoklu Önizleme Alanı Stilleri */
-        .preview-box { background:#1a1a1a; padding:5px; border:1px solid #333; border-radius:4px; text-align:center; width:110px; }
-        .preview-box img { width:100%; height:70px; object-fit:contain; margin-bottom:5px; background:#000; }
-        .preview-controls { display:flex; justify-content:space-between; margin-bottom:5px; }
-        .preview-btn { padding:2px 8px; cursor:pointer; background:#333; color:white; border:none; border-radius:3px; }
-        .preview-btn:hover { background:#555; }
-        .delete-btn { width:100%; background:#4a0000; color:white; border:none; padding:4px; font-size:10px; cursor:pointer; border-radius:3px; font-weight:bold;}
-        .delete-btn:hover { background:#6a0000; }
+        .nav-links .join-btn-nav:hover {
+            background-color: #e0e0e0;
+            color: var(--bg-color);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 15px;
+            margin-left: 10px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 20px;
+            align-items: center;
+        }
+
+        .nav-icons a {
+            color: var(--text-muted);
+        }
+
+        .nav-icons a:hover {
+            color: var(--accent);
+        }
+
+        .nav-icons a svg {
+            width: 20px;
+            height: 20px;
+            transition: stroke 0.3s;
+        }
+
+        /* --- HERO (GİRİŞ) BÖLÜMÜ --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 20px 60px 20px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 4.2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            max-width: 1000px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards 0.2s;
+        }
+
+        .hero .slogan {
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            color: var(--accent);
+            font-weight: 400;
+            margin-bottom: 30px;
+            letter-spacing: 0.01em;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards 0.4s;
+        }
+
+        .hero .desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            margin-bottom: 40px;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards 0.5s;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease forwards 0.6s;
+        }
+
+        .btn {
+            padding: 16px 36px;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--bg-color);
+            border: 1px solid var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            background-color: var(--accent-dim);
+        }
+
+        /* --- GENEL BÖLÜM WRAPPERLARI --- */
+        .section-wrapper {
+            padding: 120px 5%;
+        }
+
+        .bg-darker {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .section-heading {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* HAKKIMIZDA BÖLÜMÜ (KURUMSAL KİMLİK) */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .mission-box {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+        
+        .mission-box:hover {
+            border-color: #444;
+        }
+
+        .mission-box h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        
+        .mission-box p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* --- YÖNETİM KURULU TASARIMI --- */
+        .board-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 50px;
+        }
+
+        .board-top {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .board-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .board-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            width: 280px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .board-card:hover {
+            transform: translateY(-10px);
+            border-color: #555;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        }
+
+        .board-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, #555, #999);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .board-card:hover::after {
+            opacity: 1;
+        }
+
+        .founder-card {
+            width: 320px;
+            border-color: #444;
+            box-shadow: 0 10px 25px rgba(255,255,255,0.02);
+        }
+        
+        .founder-card::after {
+            background: linear-gradient(90deg, var(--accent), #555);
+        }
+
+        .advisor-card {
+            width: 320px;
+            border-color: #333;
+            box-shadow: 0 10px 25px rgba(255,255,255,0.02);
+        }
+
+        .advisor-card::after {
+            background: linear-gradient(90deg, #6b7280, #374151);
+        }
+
+        .board-img-wrapper {
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            height: auto;
+            background: #111; 
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .board-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 15%;
+            transition: transform 0.5s ease, filter 0.5s ease;
+            filter: grayscale(15%);
+        }
+        
+        /* Şablon/Logo Görselleri İçin Özel Ayar (Kesilmemesi İçin) */
+        .board-img-wrapper img[src="1.png"] {
+            object-fit: contain;
+            padding: 30px;
+            filter: grayscale(0%);
+        }
+
+        .board-card:hover .board-img-wrapper img {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+        }
+
+        .board-info {
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .board-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .board-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .founder-card .board-title {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .advisor-card .board-title {
+            color: #9ca3af;
+            font-weight: 600;
+        }
+
+        .board-social {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .board-social a {
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            position: relative;
+            z-index: 20;
+            cursor: pointer;
+        }
+
+        .board-social a:hover {
+            color: #fff;
+            border-color: #0077b5;
+            background: #0077b5;
+            transform: translateY(-3px);
+        }
+
+        .board-social a.email-btn:hover {
+            border-color: #ea4335;
+            background: #ea4335;
+        }
+
+        @media (max-width: 768px) {
+            .founder-card, .advisor-card, .board-card {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        /* FOT-M PROJE TAKIMI BÖLÜMÜ VE DEV LOGO AYARI */
+        #fotm-takimi .about-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+        
+        #fotm-takimi .about-text p {
+            max-width: 800px;
+        }
+        
+        .fotm-hero-logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .fotm-logo-img {
+            height: 350px !important; 
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            mix-blend-mode: screen;
+        }
+
+        /* FAALİYET KARTLARI */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px 30px;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, #333, #666);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            border-color: #555;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        /* --- AKILLI HABER TASARIMI (CAROUSEL) --- */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+
+        .blog-grid.slider-mode {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 40px;
+        }
+        .blog-grid.slider-mode::-webkit-scrollbar { display: none; }
+
+        .blog-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+            cursor: pointer;
+        }
+        .blog-card.visible { opacity: 1; transform: translateY(0); }
+
+        .slider-mode .blog-card {
+            flex: 0 0 350px;
+            scroll-snap-align: start;
+        }
+
+        .blog-card:hover { border-color: #555; transform: translateY(-5px); }
+
+        .blog-img {
+            height: 260px;
+            background: #050505;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            background-size: contain; 
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .blog-content {
+            padding: 30px;
+        }
+
+        .blog-tag {
+            font-size: 0.75rem;
+            background: var(--bg-color);
+            padding: 4px 10px;
+            border-radius: 100px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: inline-block;
+            border: 1px solid var(--border-color);
+        }
+
+        .blog-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .blog-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* --- SLIDER OKLARI TASARIMI --- */
+        .slider-arrows {
+            display: none;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .slider-arrows button {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .slider-arrows button:hover {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+            transform: scale(1.05);
+        }
+
+        .slider-arrows button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* --- MODAL (AÇILIR PENCERE) VE İÇ SWIPER TASARIMI --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto; 
+            border-radius: 12px;
+            position: relative;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 10;
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover { color: var(--text-main); }
+        
+        .swiper-slide {
+            padding: 20px 40px 40px 40px;
+            color: var(--text-main);
+            text-align: left;
+        }
+        
+        .swiper-slide h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .swiper-slide p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        .swiper-button-next, .swiper-button-prev { color: var(--text-muted); }
+        .swiper-button-next:hover, .swiper-button-prev:hover { color: var(--accent); }
+        .swiper-pagination-bullet { background: var(--text-muted); }
+        .swiper-pagination-bullet-active { background: var(--accent); }
+
+        /* --- FOOTER TASARIMI --- */
+        footer {
+            padding: 60px 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-logo {
+            height: 80px; 
+            object-fit: contain;
+            mix-blend-mode: screen;
+        }
+
+        .footer-bottom-text {
+            color: #71717a;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* ANİMASYONLAR VE MOBİL UYUM */
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 1024px) {
+            .nav-links > a.text-link { display: none; }
+            .nav-icons { border-left: none; padding-left: 0; }
+        }
+
+        /* MOBİL UYUM KODLARI */
+        @media (max-width: 768px) {
+            .hero { padding-top: 100px; }
+            .hero h1 { font-size: 2.2rem; }
+            .slider-mode .blog-card { flex: 0 0 280px; }
+            .logo-container img { height: 45px; }
+            nav.scrolled .logo-container img { height: 40px; }
+            
+            .about-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            #fotm-takimi .about-text { align-items: center; text-align: center; }
+            .fotm-logo-img { height: 220px !important; }
+            .section-wrapper { padding: 80px 5%; }
+            
+            .hero-buttons { flex-direction: column; width: 100%; gap: 15px; }
+            .btn { width: 100%; }
+            
+            .nav-links { gap: 15px; }
+            .nav-links .join-btn-nav { font-size: 12px; padding: 8px 12px; }
+            .nav-icons a svg { width: 18px; height: 18px; }
+
+            .modal-content { padding: 30px 15px; } 
+            .swiper-slide { padding: 10px 10px 30px 10px; }
+        }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h2 id="formBaslik">Medya Ekle</h2>
-        <span class="status-text">Üretimin Geleceği Haber Yönetim Paneli</span>
+
+    <div class="bg-glow"></div>
+
+    <nav id="navbar">
+        <div class="logo-container">
+            <img src="logo/uretimingelecegilogo.png" alt="Üretimin Geleceği Logo" style="border-radius: 50%;">
+        </div>
+        <div class="nav-links">
+            <a href="#hero" class="text-link smooth-scroll">Ana Sayfa</a>
+            <a href="#hakkimizda" class="text-link smooth-scroll">Kurumsal Kimlik</a>
+            <a href="#yonetim-kurulu" class="text-link smooth-scroll">Yönetim Kurulu</a>
+            <a href="#fotm-takimi" class="text-link smooth-scroll">FOT-M Takımı</a>
+            <a href="#arge" class="text-link smooth-scroll">Çalışma Alanları</a>
+            
+            <div class="nav-icons">
+                <a href="https://www.instagram.com/subuuretimingelecegi/" target="_blank" aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a href="https://www.linkedin.com/company/uretimingelecegi-subu/" target="_blank" aria-label="LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+                <a onclick="mailGonder('uretimingelecegi@gmail.com')" aria-label="E-posta" style="cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </a>
+            </div>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf7tYTZ3Wy6WZc64zi3DsCpmwAchU1Be7CKoMNG221JLivJig/viewform?usp=dialog" target="_blank" class="join-btn-nav">Ekibe Katıl</a>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero">
+        <h1>ÜRETİMİN GELECEĞİ TOPLULUĞU</h1>
+        <p class="slogan">Üretimin Geleceği Bizim Elimizde</p>
+        <p class="desc">Sakarya Uygulamalı Bilimler Üniversitesi bünyesinde teorik bilgiyi pratiğe dönüştüren; Endüstri 4.0 ve otomasyon sistemleri odaklı projeler geliştiren öğrenci topluluğuyuz.</p>
         
-        <label>Etiket (Kategori)</label>
-        <input type="text" id="etiket" placeholder="Örn: DUYURU">
-        
-        <label>Haber Başlığı</label>
-        <input type="text" id="baslik" placeholder="Başlık yazın...">
-        
-        <label>İçerik Metni</label>
-        <textarea id="metin" rows="5" placeholder="Haber metnini girin... Her fotoğraf değiştiğinde yazının da değişmesini istiyorsanız paragrafları '---' ile ayırın."></textarea>
-        
-        <label style="color:#fff;">1. Kapak Fotoğrafı (Opsiyonel)</label>
-        <label>Seçilmezse slider'daki ilk fotoğraf vitrin fotoğrafı olur. Ana sayfada görünür, kaydırmalı fotoğrafların arasına karışmaz.</label>
-        <input type="file" id="kapakGorsel" accept="image/*">
-        <div id="kapakOnizleme" style="margin-bottom: 20px;"></div>
-        
-        <label style="color:#fff;">2. Kaydırmalı Haber Fotoğrafları (Galerİ)</label>
-        <label>Instagram gönderisi gibi sağa sola kaydırılacak ana görseller (Birden fazla seçebilirsiniz). Sırasını oklarla ayarlayın.</label>
-        <input type="file" id="galeriGorseller" accept="image/*" multiple>
-        <div id="galeriOnizleme" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 30px;"></div>
-        
-        <button class="btn-submit" id="submitBtn" onclick="formuGonder()">YAYINLA</button>
-        <button class="btn-cancel" id="iptalBtn" onclick="iptalEt()">İPTAL ET</button>
+        <div class="hero-buttons">
+            <a href="#hakkimizda" class="btn btn-primary smooth-scroll">BİZİ TANIYIN</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf7tYTZ3Wy6WZc64zi3DsCpmwAchU1Be7CKoMNG221JLivJig/viewform?usp=dialog" target="_blank" class="btn btn-secondary">TOPLULUĞA KATIL</a>
+        </div>
+    </section>
+
+    <section id="hakkimizda" class="section-wrapper bg-darker">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text fade-in">
+                    <h2 class="section-title">HAKKIMIZDA</h2>
+                    <h3 class="section-heading" style="margin-bottom: 20px;">Kurumsal Kimlik</h3>
+                    <p><strong>Üretimin Geleceği Öğrenci Topluluğu</strong>, akademik teoriyi endüstriyel gerçeklikle buluşturan bir teknoloji ve gelişim platformudur. Kurumsal kimliğimiz; disiplin, sistemli çalışma ve sahada üretkenlik üzerine inşa edilmiştir.</p>
+                    <p>Klasik kalıpların ötesinde, sanayinin tam içinden gelen dinamiklerle hareket ediyoruz. Otomasyon ve akıllı üretim odağında, teorik altyapıyı sahanın ihtiyaç duyduğu somut endüstriyel çözümlere dönüştürüyoruz.</p>
+                </div>
+                
+                <div class="about-missions fade-in">
+                    <div class="mission-box">
+                        <h4>Temel Amacımız</h4>
+                        <p>Öğrencilerimizin üretim teknolojileri, Endüstri 4.0 ve otomasyon sistemleri konularında akademik ve sosyal gelişimlerini sağlamak.</p>
+                    </div>
+                    <div class="mission-box">
+                        <h4>Hedefimiz</h4>
+                        <p>TEKNOFEST ve TÜBİTAK gibi mühendislik yarışmalarında üniversitemizi proje takımlarıyla temsil etmek.</p>
+                    </div>
+                    <div class="mission-box">
+                        <h4>Misyonumuz</h4>
+                        <p>Sektör temsilcileri ile öğrencileri bir araya getirerek üniversitemizde üretim kültürünü yaygınlaştırmak.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="yonetim-kurulu" class="section-wrapper">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title"> </h2>
+                <h3 class="section-heading">Yönetim Kurulu</h3>
+                <p style="color:var(--text-muted); max-width:600px; margin-top:15px; font-weight:300;">Topluluğumuzun vizyonunu belirleyen ve projelerimize sahada öncülük eden yönetim ekibimiz.</p>
+            </div>
+
+            <div class="board-container">
+                
+                <div class="board-top fade-in">
+                    <div class="board-card advisor-card">
+                        <div class="board-img-wrapper">
+                            <img src="7C3174715910D832050EC4EADB765D23.jpg" alt="Serkan Mutlu">
+                        </div>
+                        <div class="board-info">
+                            <h4 class="board-name">Serkan Mutlu</h4>
+                            <span class="board-title">Akademik Danışman</span>
+                            <div class="board-social">
+                                <a href="https://www.linkedin.com/in/sekovic/" target="_blank" aria-label="LinkedIn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                </a>
+                                <a onclick="mailGonder('serkanmutlu@subu.edu.tr')" class="email-btn" aria-label="E-posta">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board-top fade-in">
+                    <div class="board-card founder-card">
+                        <div class="board-img-wrapper">
+                            <img src="muhammedardasari.jpg" alt="Muhammed Arda Sarı">
+                        </div>
+                        <div class="board-info">
+                            <h4 class="board-name">Muhammed Arda Sarı</h4>
+                            <span class="board-title">Kurucu Başkan</span>
+                            <div class="board-social">
+                                <a href="https://www.linkedin.com/in/muhammed-arda-sar%C4%B1-009554335/" target="_blank" aria-label="LinkedIn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                </a>
+                                <a onclick="mailGonder('sarimuhammedarda52@gmail.com')" class="email-btn" aria-label="E-posta">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board-grid fade-in">
+                    <div class="board-card">
+                        <div class="board-img-wrapper">
+                            <img src="emirhansenel.png" alt="Emirhan Şenel">
+                        </div>
+                        <div class="board-info">
+                            <h4 class="board-name">Emirhan Şenel</h4>
+                            <span class="board-title">Kurucu Başkan Yardımcısı</span>
+                            <div class="board-social">
+                                <a href="https://www.linkedin.com/in/emirhan-%C5%9Fenel-651824300/" target="_blank" aria-label="LinkedIn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                </a>
+                                <a onclick="mailGonder('esenel445@gmail.com')" class="email-btn" aria-label="E-posta">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="board-card">
+                        <div class="board-img-wrapper">
+                            <img src="mustafacandemir.jpg" alt="Mustafa Can Demir">
+                        </div>
+                        <div class="board-info">
+                            <h4 class="board-name">Mustafa Can Demir</h4>
+                            <span class="board-title">Kurucu Genel Sekreter</span>
+                            <div class="board-social">
+                                <a href="http://linkedin.com/in/mustafa-can-demir-314296399/" target="_blank" aria-label="LinkedIn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                </a>
+                                <a onclick="mailGonder('mustafacandmrr@gmail.com')" class="email-btn" aria-label="E-posta">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="board-card">
+                        <div class="board-img-wrapper">
+                            <img src="mehmetceran.png" alt="Mehmet Ceran">
+                        </div>
+                        <div class="board-info">
+                            <h4 class="board-name">Mehmet Ceran</h4>
+                            <span class="board-title">Kurucu Teknik-Proje Sorumlusu</span>
+                            <div class="board-social">
+                                <a href="https://www.linkedin.com/in/mehmetceran-428187368/" target="_blank" aria-label="LinkedIn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                </a>
+                                <a onclick="mailGonder('ceranmehmet08@gmail.com')" class="email-btn" aria-label="E-posta">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="board-card">
+                        <div class="board-img-wrapper">
+                            <img src="ilkerkurtini.jpg" alt="İlker Kurtini">
+                        </div>
+                        <div class="board-info">
+                            <h4 class="board-name">İlker Kurtini</h4>
+                            <span class="board-title">Kurucu Etkinlik Sorumlusu</span>
+                            <div class="board-social">
+                                <a onclick="mailGonder('ftnhilker@gmail.com')" class="email-btn" aria-label="E-posta">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="fotm-takimi" class="section-wrapper bg-darker">
+        <div class="container">
+            <div class="about-grid">
+                 <div class="about-text fade-in">
+                    <h2 class="section-title">PROJE TAKIMIMIZ</h2>
+                    <h3 class="section-heading" style="margin-bottom: 20px;">Endüstri 4.0 Proje Takımı: FOT-M</h3>
+                    <p><strong>FOT-M (Future of the Manufacturing)</strong>, Üretimin Geleceği Öğrenci Topluluğu'nun TEKNOFEST ve TÜBİTAK gibi platformlarda üniversitemizi temsil eden Endüstri 4.0 odaklı proje takımıdır. Vizyonumuz; akıllı imalat teknolojileri ve otomasyon sistemleri üzerine sahada birebir uygulanabilir, yenilikçi projeler geliştirmektir.</p>
+                    <p>Teoriyi sanayi pratiğiyle birleştiren ekibimiz; sahadan veri toplayan, dijital ikiz senaryoları kurgulayan ve üretim sistemlerini optimize eden projelerle ülkemizin milli teknoloji hamlesine doğrudan katkı sağlamayı hedefler. Sadece tasarlayan değil, bizzat sahada kuran ve işleten bir kültürle hareket ediyoruz.</p>
+                </div>
+                 <div class="fotm-hero-logo-container fade-in">
+                    <img src="logo/fotmresim.png" alt="FOT-M Takım Logosu" class="fotm-logo-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="arge" class="section-wrapper">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">FAALİYETLERİMİZ</h2>
+                <h3 class="section-heading">Çalışma Alanlarımız</h3>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card fade-in">
+                    <h3>Ar-Ge ve Prototip</h3>
+                    <p>İmalat süreçlerini geleceğe taşıyan yenilikçi konseptler geliştiriyoruz. Endüstriyel Nesnelerin İnterneti mimarileri, gelişmiş görüntü işleme teknolojileri ve dijital ikiz senaryolarından faydalanarak; üretimde verimliliği artıracak yapay zeka destekli, gerçek zamanlı hata tespiti yapabilen otonom sistem prototipleri tasarlıyoruz.</p>
+                </div>
+                <div class="card fade-in">
+                    <h3>İleri İmalat Teknolojileri</h3>
+                    <p>Karmaşık mühendislik tasarımlarını sanal ortamdan fiziksel üretime aktarıyoruz. Eklemeli imalat, hassas işleme teknolojileri ve endüstriyel robotik entegrasyon yöntemlerini senkronize ederek, sanayinin ihtiyaç duyduğu sürdürülebilir çözümleri sahaya uygulanabilir hale getiriyoruz.</p>
+                </div>
+                <div class="card fade-in">
+                    <h3>Otomasyon ve Kodlama</h3>
+                    <p>Üretim sahasının uçtan uca dijitalleşmesi için güvenilir kontrol altyapıları kuruyoruz. Kapsamlı endüstriyel otomasyon mimarileri ve veri odaklı süreç optimizasyonu ile sahadan toplanan bilgileri analiz ediyor; bu verileri İmalat Yürütme Sistemleri standartlarına uygun, izlenebilir akıllı endüstriyel panellere dönüştürüyoruz.</p>
+                </div>
+                <div class="card fade-in">
+                    <h3>Veri Görselleştirme ve Endüstriyel İzlenebilirlik</h3>
+                    <p>Üretim sahasındaki karmaşık büyük veriyi anlamlı ve stratejik içgörülere dönüştürüyoruz. İmalat Yürütme Sistemleri altyapılarına entegre edilebilir, karar alma süreçlerini hızlandıran akıllı endüstriyel gösterge panelleri ve kullanıcı dostu arayüzler tasarlıyoruz.</p>
+                </div>
+                <div class="card fade-in">
+                    <h3>Proje Yönetimi ve Sanayi Entegrasyonu</h3>
+                    <p>Akademi-sanayi iş birliği vizyonumuzla, teorik bilgiyi sahaya taşıyoruz. TÜBİTAK ve TEKNOFEST gibi prestijli platformlarda yenilikçi projeler üretiyor; geleceğin uzman adayları olarak sektörün dijital dönüşüm ihtiyaçlarına doğrudan yanıt veren, sürdürülebilir ve uygulanabilir çözümler geliştiriyoruz.</p>
+                </div>
+                <div class="card fade-in">
+                    <h3>Uygulamalı Eğitim ve Atölye Çalışmaları</h3>
+                    <p>Ekip üyelerimizin profesyonel yetkinliklerini artırmak amacıyla dijital fabrika simülasyonları ve donanım entegrasyonu üzerine uygulamalı atölyeler düzenliyoruz. Teorik altyapıyı pratik çıktılara dönüştürerek, sanayinin nitelikli personel ihtiyacını karşılayacak rekabete hazır bireyler yetiştiriyoruz."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="section-wrapper bg-darker" style="display: none;">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">GÜNCEL & MEDYA</h2>
+                <h3 class="section-heading">Son Gelişmeler</h3>
+                <p id="scrollHint" style="color:var(--text-muted); font-size: 11px; margin-top: 10px; display: none;">← Sağa sola kaydırın →</p>
+                
+                <div class="slider-arrows" id="sliderArrows">
+                    <button onclick="haberiKaydir(-1)" aria-label="Geri">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button onclick="haberiKaydir(1)" aria-label="İleri">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="blog-grid" id="blogGrid">
+                </div>
+        </div>
+    </section>
+
+    <footer>
+        <img src="logo/altresim.png" alt="SUBÜ ve Üretimin Geleceği Logo" class="footer-logo">
+        <div class="footer-bottom-text">
+            &copy; 2026 Üretimin Geleceği Topluluğu. Tüm hakları saklıdır.<br>
+            Sakarya Uygulamalı Bilimler Üniversitesi Üretimin Geleceği Öğrenci Topluluğu
+        </div>
+    </footer>
+
+    <div id="newsModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper" id="swiperWrapper">
+                    </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="content">
-        <h3>Yayındaki İçerikler</h3>
-        <div class="haber-grid" id="duyuruListesi"></div>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
-        // Şifre kontrolü
-        const giris = prompt("Yönetici Şifresi:");
-        if(giris !== "FOTM2026") {
-            document.write("<h2>Erişim Reddedildi</h2>");
-            window.stop();
+        // Eksik değişkenleri global olarak tanımlıyoruz ki Swiper başlarken çökmesin
+        let swiperInstance = null;
+        let globalDuyurular = [];
+
+        // Akıllı Mail Yönlendirme Fonksiyonu
+        function mailGonder(email) {
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                window.location.href = "mailto:" + email;
+            } else {
+                window.open("https://mail.google.com/mail/?view=cm&fs=1&to=" + email, "_blank");
+            }
         }
 
-        const S_URL = "https://tzdpljzkzvejdaydcwwi.supabase.co/rest/v1/duyurular";
-        const S_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6ZHBsanprenZlamRheWRjd3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDc5MjEsImV4cCI6MjA5MjI4MzkyMX0.BkSThURX33Spc2Ir5CjLpGZeueJ0pN-ZuznARP64g4s"; 
+        // Hash'siz pürüzsüz kaydırma
+        document.querySelectorAll('.smooth-scroll').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('mailto:') || href.startsWith('http') || href === '#') {
+                    return; 
+                }
+                
+                e.preventDefault();
+                const targetId = href.substring(1);
+                const targetElement = document.getElementById(targetId);
+                if(targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                    history.replaceState(null, null, ' ');
+                }
+            });
+        });
 
-        const headers = { 
-            "apikey": S_KEY, 
-            "Authorization": `Bearer ${S_KEY}`, 
-            "Content-Type": "application/json",
-            "Prefer": "return=representation"
-        };
+        // Faviconu (Sekme Logosu) Yuvarlak Yapma Scripti
+        window.addEventListener('load', () => {
+            const favicon = document.getElementById('favicon');
+            if (favicon) {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.beginPath();
+                    ctx.arc(canvas.width / 2, canvas.height / 2, Math.min(canvas.width, canvas.height) / 2, 0, Math.PI * 2);
+                    ctx.clip();
+                    ctx.drawImage(img, 0, 0);
+                    favicon.href = canvas.toDataURL('image/png');
+                };
+                img.src = favicon.href;
+            }
+        });
 
-        let tumDuyurular = [];
-        let guncellenecekId = null;
+        // Haber Dışı Arkaplana Tıklayınca Modalı Kapatma
+        document.getElementById('newsModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
 
-        // Medya Durumu İçin Değişkenler
-        let kapakBase64 = "";
-        let galeriBase64 = [];
+        function haberiKaydir(yon) {
+            const grid = document.getElementById('blogGrid');
+            const kaydirmaMiktari = 375;
+            grid.scrollBy({ left: yon * kaydirmaMiktari, behavior: 'smooth' });
+        }
 
-        window.onload = duyurulariYukle;
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
 
-        function parseGorsel(gorselStr) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        function parseGorselData(gorselStr) {
             if (!gorselStr) return { kapak: "", galeri: [] };
             if (gorselStr.trim().startsWith('{')) {
-                try { return JSON.parse(gorselStr); } 
-                catch(e) { return { kapak: gorselStr, galeri: [] }; }
+                try {
+                    return JSON.parse(gorselStr);
+                } catch(e) {
+                    return { kapak: gorselStr, galeri: [] };
+                }
             }
             return { kapak: gorselStr, galeri: [] };
         }
 
-        async function duyurulariYukle() {
-            try {
-                const res = await fetch(`${S_URL}?select=*&order=id.desc`, { headers });
-                tumDuyurular = await res.json();
-                const listeDiv = document.getElementById('duyuruListesi');
-                listeDiv.innerHTML = tumDuyurular.length ? '' : '<p style="color:#666;">Henüz yayınlanmış bir haber yok.</p>';
+        function openModal(id) {
+            const duyuru = globalDuyurular.find(d => d.id === id);
+            if(!duyuru) return;
 
-                tumDuyurular.forEach(d => {
-                    const pGorsel = parseGorsel(d.gorsel);
-                    const onizlemeResmi = pGorsel.kapak || (pGorsel.galeri.length > 0 ? pGorsel.galeri[0] : null);
-                    
-                    const img = onizlemeResmi ? `<div class="gorsel-onizleme" style="background-image: url('${onizlemeResmi}')"></div>` : '';
-                    
-                    listeDiv.innerHTML += `
-                        <div class="haber-card">
-                            ${img}
-                            <span style="font-size:10px; color:#aaa; text-transform:uppercase;">${d.etiket}</span>
-                            <h4 style="margin: 5px 0;">${d.baslik}</h4>
-                            <div class="action-buttons">
-                                <button class="btn-edit" onclick="duzenlemeModunaGec(${d.id})">DÜZENLE</button>
-                                <button class="btn-delete" onclick="duyuruSil(${d.id})">SİL</button>
-                            </div>
-                        </div>`;
-                });
-            } catch (e) { console.error("Yükleme hatası:", e); }
-        }
+            const wrapper = document.getElementById('swiperWrapper');
+            wrapper.innerHTML = '';
 
-        /* DOSYA YÜKLEME VE ÖNİZLEME MANTIĞI */
-        document.getElementById('kapakGorsel').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                kapakBase64 = await fileToBase64(file);
-                renderKapak();
+            const pGorsel = parseGorselData(duyuru.gorsel);
+            const imagesToUse = pGorsel.galeri && pGorsel.galeri.length > 0 ? pGorsel.galeri : (pGorsel.kapak ? [pGorsel.kapak] : []);
+            
+            const texts = duyuru.metin ? duyuru.metin.split('---') : [];
+            const slideCount = Math.max(texts.length, imagesToUse.length);
+
+            for (let i = 0; i < slideCount; i++) {
+                let textPart = texts[i] ? texts[i].trim() : '';
+                let imgPart = imagesToUse[i] ? imagesToUse[i] : '';
+                
+                const gorselHtml = imgPart ? `<img src="${imgPart}" style="width:100%; max-height:400px; object-fit:contain; margin-bottom:20px; border-radius:8px; background:#050505;">` : '';
+                const baslikHtml = i === 0 ? duyuru.baslik : (textPart ? 'Detaylar' : '');
+                const baslikTag = baslikHtml ? `<h3>${baslikHtml}</h3>` : '';
+
+                wrapper.innerHTML += `
+                    <div class="swiper-slide">
+                        ${gorselHtml}
+                        ${baslikTag}
+                        <p>${textPart}</p>
+                    </div>
+                `;
             }
-        });
 
-        document.getElementById('galeriGorseller').addEventListener('change', async (e) => {
-            const files = e.target.files;
-            for(let i = 0; i < files.length; i++) {
-                const b64 = await fileToBase64(files[i]);
-                galeriBase64.push(b64);
+            document.getElementById('newsModal').classList.add('active');
+
+            // Eğer önceki bir swiperInstance varsa onu temizliyoruz
+            if(swiperInstance) {
+                swiperInstance.destroy(true, true);
             }
-            renderGaleri();
-            // Dosya inputunu sıfırla ki aynı dosyayı bir daha seçmek isterse seçebilsin
-            e.target.value = ''; 
-        });
-
-        function fileToBase64(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.readAsDataURL(file);
+            // Ve yeniden başlatıyoruz
+            swiperInstance = new Swiper(".mySwiper", {
+                navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+                pagination: { el: ".swiper-pagination", clickable: true },
+                spaceBetween: 30,
             });
         }
 
-        function renderKapak() {
-            const div = document.getElementById('kapakOnizleme');
-            if (kapakBase64) {
-                div.innerHTML = `
-                    <div class="preview-box" style="width:150px;">
-                        <img src="${kapakBase64}">
-                        <button type="button" class="delete-btn" onclick="silKapak()">KAPAK İPTAL</button>
-                    </div>`;
-            } else {
-                div.innerHTML = '';
-            }
+        function closeModal() {
+            document.getElementById('newsModal').classList.remove('active');
         }
 
-        function silKapak() {
-            kapakBase64 = "";
-            document.getElementById('kapakGorsel').value = "";
-            renderKapak();
-        }
-
-        function renderGaleri() {
-            const div = document.getElementById('galeriOnizleme');
-            div.innerHTML = '';
-            galeriBase64.forEach((b64, index) => {
-                div.innerHTML += `
-                    <div class="preview-box">
-                        <img src="${b64}">
-                        <div class="preview-controls">
-                            <button type="button" class="preview-btn" onclick="tasGaleri(${index}, -1)">&lt;</button>
-                            <span style="font-size:11px; font-weight:bold; color:#fff; line-height:20px;">${index + 1}</span>
-                            <button type="button" class="preview-btn" onclick="tasGaleri(${index}, 1)">&gt;</button>
-                        </div>
-                        <button type="button" class="delete-btn" onclick="silGaleri(${index})">SİL</button>
-                    </div>`;
-            });
-        }
-
-        function tasGaleri(index, yon) {
-            if (index + yon < 0 || index + yon >= galeriBase64.length) return;
-            const temp = galeriBase64[index];
-            galeriBase64[index] = galeriBase64[index + yon];
-            galeriBase64[index + yon] = temp;
-            renderGaleri();
-        }
-
-        function silGaleri(index) {
-            galeriBase64.splice(index, 1);
-            renderGaleri();
-        }
-
-        function duzenlemeModunaGec(id) {
-            const d = tumDuyurular.find(x => x.id === id);
-            if(!d) return;
-
-            guncellenecekId = id;
-            document.getElementById('formBaslik').innerText = "Medyayı Güncelle";
-            document.getElementById('etiket').value = d.etiket || '';
-            document.getElementById('baslik').value = d.baslik || '';
-            document.getElementById('metin').value = d.metin || '';
-            document.getElementById('kapakGorsel').value = ''; 
-            document.getElementById('galeriGorseller').value = ''; 
+        document.addEventListener('DOMContentLoaded', async () => {
+            const blogSection = document.getElementById('blog');
+            const blogGrid = document.getElementById('blogGrid');
+            const scrollHint = document.getElementById('scrollHint');
+            const sliderArrows = document.getElementById('sliderArrows');
             
-            const pGorsel = parseGorsel(d.gorsel);
-            kapakBase64 = pGorsel.kapak || "";
-            galeriBase64 = pGorsel.galeri || [];
-            
-            renderKapak();
-            renderGaleri();
-            
-            document.getElementById('submitBtn').innerText = "GÜNCELLE";
-            document.getElementById('iptalBtn').style.display = "block";
-            
-            // Kullanıcıyı en üste kaydır
-            document.querySelector('.sidebar').scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function iptalEt() {
-            guncellenecekId = null;
-            document.getElementById('formBaslik').innerText = "Medya Ekle";
-            document.getElementById('etiket').value = '';
-            document.getElementById('baslik').value = '';
-            document.getElementById('metin').value = '';
-            document.getElementById('kapakGorsel').value = '';
-            document.getElementById('galeriGorseller').value = '';
-            
-            kapakBase64 = "";
-            galeriBase64 = [];
-            renderKapak();
-            renderGaleri();
-            
-            document.getElementById('submitBtn').innerText = "YAYINLA";
-            document.getElementById('iptalBtn').style.display = "none";
-        }
-
-        async function formuGonder() {
-            const submitBtn = document.getElementById('submitBtn');
-
-            submitBtn.innerText = "İŞLENİYOR...";
-            submitBtn.disabled = true;
-
-            const veri = {
-                etiket: document.getElementById('etiket').value,
-                baslik: document.getElementById('baslik').value,
-                metin: document.getElementById('metin').value
-            };
-
-            // Görselleri JSON objesi olarak stringe çevir
-            if (!kapakBase64 && galeriBase64.length === 0) {
-                veri.gorsel = "";
-            } else {
-                veri.gorsel = JSON.stringify({ kapak: kapakBase64, galeri: galeriBase64 });
-            }
-
-            let fetchUrl = S_URL;
-            let fetchMethod = 'POST';
-
-            if (guncellenecekId !== null) {
-                fetchUrl = `${S_URL}?id=eq.${guncellenecekId}`;
-                fetchMethod = 'PATCH';
-            }
+            const S_URL = "https://tzdpljzkzvejdaydcwwi.supabase.co/rest/v1/duyurular";
+            const S_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6ZHBsanprenZlamRheWRjd3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDc5MjEsImV4cCI6MjA5MjI4MzkyMX0.BkSThURX33Spc2Ir5CjLpGZeueJ0pN-ZuznARP64g4s"; 
 
             try {
-                const res = await fetch(fetchUrl, { 
-                    method: fetchMethod, 
-                    headers: headers, 
-                    body: JSON.stringify(veri) 
+                const res = await fetch(`${S_URL}?select=*&order=id.desc`, {
+                    headers: { "apikey": S_KEY, "Authorization": `Bearer ${S_KEY}` }
                 });
+                const duyurular = await res.json();
+                globalDuyurular = duyurular; 
 
-                if(res.ok) {
-                    alert(guncellenecekId ? "Haber başarıyla güncellendi!" : "Haber başarıyla yayınlandı!");
-                    location.reload();
-                } else {
-                    const err = await res.json();
-                    alert("Hata: " + err.message);
-                    submitBtn.innerText = guncellenecekId ? "GÜNCELLE" : "YAYINLA";
-                    submitBtn.disabled = false;
+                if (duyurular && duyurular.length > 0) {
+                    blogSection.style.display = 'block';
+                    blogGrid.innerHTML = ''; 
+
+                    if (duyurular.length > 1) {
+                        blogGrid.classList.add('slider-mode');
+                        if (window.innerWidth <= 768) {
+                            scrollHint.style.display = 'block';
+                        } else {
+                            sliderArrows.style.display = 'flex';
+                        }
+                    }
+                    
+                    duyurular.forEach(duyuru => {
+                        const pGorsel = parseGorselData(duyuru.gorsel);
+                        const gridCoverImg = pGorsel.kapak || (pGorsel.galeri.length > 0 ? pGorsel.galeri[0] : "");
+
+                        const img = gridCoverImg 
+                            ? `<div class="blog-img" style="background-image: url('${gridCoverImg}')"></div>`
+                            : `<div class="blog-img"></div>`;
+                        
+                        const onizlemeMetni = duyuru.metin ? duyuru.metin.split('---')[0] : "";
+
+                        blogGrid.innerHTML += `
+                            <article class="blog-card fade-in" onclick="openModal(${duyuru.id})">
+                                ${img}
+                                <div class="blog-content">
+                                    <span class="blog-tag">${duyuru.etiket || 'Duyuru'}</span>
+                                    <h4 style="color:#fff; margin-bottom:10px;">${duyuru.baslik}</h4>
+                                    <p style="color:#a1a1aa; font-size:14px; font-weight:300;">${onizlemeMetni}</p>
+                                    <span style="color:var(--accent); font-size:12px; font-weight:600; display:inline-block; margin-top:10px;">Devamını Oku ➔</span>
+                                </div>
+                            </article>`;
+                    });
+
+                    document.querySelectorAll('.blog-card').forEach(el => observer.observe(el));
                 }
             } catch (err) {
-                alert("Bağlantı hatası yaşandı!");
-                submitBtn.innerText = guncellenecekId ? "GÜNCELLE" : "YAYINLA";
-                submitBtn.disabled = false;
+                console.error("Haber çekme hatası:", err);
             }
-        }
-
-        async function duyuruSil(id) {
-            if(confirm('Silmek istediğine emin misin?')) {
-                await fetch(`${S_URL}?id=eq.${id}`, { method: 'DELETE', headers });
-                duyurulariYukle();
-                if(guncellenecekId === id) iptalEt();
-            }
-        }
+        });
     </script>
 </body>
 </html>
