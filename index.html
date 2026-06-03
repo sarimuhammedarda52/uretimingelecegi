@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Üretimin Geleceği Öğrenci Topluluğu</title>
     
-    <link rel="icon" type="image/png" href="logo/uretimingelecegilogo.png">
+    <!-- Sekme Logosu (Favicon) -->
+    <link rel="icon" id="favicon" type="image/png" href="logo/uretimingelecegilogo.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +31,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* Scroll behavior js ile yönetilecek, ancak yedek olarak kalabilir */
             scroll-behavior: smooth;
         }
 
@@ -398,20 +398,19 @@
         .board-img-wrapper {
             width: 100%;
             height: 320px;
-            background: #111; /* Resim olmayanlar veya saydam PNG'ler için temiz arkaplan */
+            background: #111; 
             overflow: hidden;
             display: flex;
             justify-content: center;
-            align-items: center; /* Merkeze hizalama */
+            align-items: center;
             border-bottom: 1px solid var(--border-color);
         }
 
-        /* Tüm resimlerin aynı uzaklıkta ve hizalamada görünmesi için */
         .board-img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: top; /* Yüzlerin görünmesi için yukarıdan hizalama */
+            object-position: top;
             transition: transform 0.5s ease, filter 0.5s ease;
             filter: grayscale(15%);
         }
@@ -831,7 +830,7 @@
 
     <nav id="navbar">
         <div class="logo-container">
-            <img src="logo/uretimingelecegilogo.png" alt="Üretimin Geleceği Logo">
+            <img src="logo/uretimingelecegilogo.png" alt="Üretimin Geleceği Logo" style="border-radius: 50%;">
         </div>
         <div class="nav-links">
             <a href="#hero" class="text-link smooth-scroll">Ana Sayfa</a>
@@ -894,6 +893,7 @@
         </div>
     </section>
 
+    <!-- YÖNETİM KURULU BÖLÜMÜ -->
     <section id="yonetim-kurulu" class="section-wrapper">
         <div class="container">
             <div class="section-header fade-in">
@@ -904,6 +904,7 @@
 
             <div class="board-container">
                 
+                <!-- Akademik Danışman -->
                 <div class="board-top fade-in">
                     <div class="board-card advisor-card">
                         <div class="board-img-wrapper">
@@ -924,10 +925,11 @@
                     </div>
                 </div>
 
+                <!-- Kurucu Başkan -->
                 <div class="board-top fade-in">
                     <div class="board-card founder-card">
                         <div class="board-img-wrapper">
-                            <img src="muhammedardasari.jpg" alt="Muhammed Arda Sarı">
+                            <img src="muhammedardasari_3.jpg" alt="Muhammed Arda Sarı">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Muhammed Arda Sarı</h4>
@@ -944,10 +946,12 @@
                     </div>
                 </div>
 
+                <!-- Yönetim Ekibi (Alt Izgara) -->
                 <div class="board-grid fade-in">
+                    <!-- Emirhan -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
-                            <img src="emirhansenel.jpg" alt="Emirhan Şenel">
+                            <img src="emirhansenel_2.jpg" alt="Emirhan Şenel">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Emirhan Şenel</h4>
@@ -963,9 +967,10 @@
                         </div>
                     </div>
 
+                    <!-- Mustafa -->
                     <div class="board-card">
-                        <div class="board-img-wrapper">
-                            <img src="1.png" alt="Mustafa Can Demir">
+                        <div class="board-img-wrapper" style="background: #1a1a1a;">
+                            <img src="1.png" alt="Mustafa Can Demir" style="object-fit: contain; padding: 20px;">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Mustafa Can Demir</h4>
@@ -981,9 +986,10 @@
                         </div>
                     </div>
 
+                    <!-- Mehmet -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
-                            <img src="mehmetceran.jpg" alt="Mehmet Ceran">
+                            <img src="mehmetceran_2.jpg" alt="Mehmet Ceran">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Mehmet Ceran</h4>
@@ -999,9 +1005,10 @@
                         </div>
                     </div>
 
+                    <!-- İlker (LinkedIn yok) -->
                     <div class="board-card">
-                        <div class="board-img-wrapper">
-                            <img src="1.png" alt="İlker Kurtini">
+                        <div class="board-img-wrapper" style="background: #1a1a1a;">
+                            <img src="1.png" alt="İlker Kurtini" style="object-fit: contain; padding: 20px;">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">İlker Kurtini</h4>
@@ -1106,6 +1113,7 @@
         let globalDuyurular = [];
         let swiperInstance = null;
 
+        // Hash'siz pürüzsüz kaydırma (Linkte #hero vb. görünmesini engeller)
         document.querySelectorAll('.smooth-scroll').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1113,10 +1121,34 @@
                 const targetElement = document.getElementById(targetId);
                 if(targetElement) {
                     targetElement.scrollIntoView({ behavior: 'smooth' });
+                    // URL'den hash (#) kısmını temizle
+                    history.replaceState(null, null, ' ');
                 }
             });
         });
 
+        // Faviconu (Sekme Logosu) Yuvarlak Yapma Scripti
+        window.addEventListener('load', () => {
+            const favicon = document.getElementById('favicon');
+            if (favicon) {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.beginPath();
+                    ctx.arc(canvas.width / 2, canvas.height / 2, Math.min(canvas.width, canvas.height) / 2, 0, Math.PI * 2);
+                    ctx.clip();
+                    ctx.drawImage(img, 0, 0);
+                    favicon.href = canvas.toDataURL('image/png');
+                };
+                img.src = favicon.href;
+            }
+        });
+
+        // Haber Dışı Arkaplana (Siyah Alana) Tıklayınca Modalı Kapatma
         document.getElementById('newsModal').addEventListener('click', function(event) {
             if (event.target === this) {
                 closeModal();
