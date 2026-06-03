@@ -21,7 +21,7 @@
         .content { flex: 1; padding: 40px; overflow-y: auto; background: #0a0a0a; }
         .haber-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .haber-card { background: #111; border: 1px solid #222; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; }
-        .gorsel-onizleme { width: 100%; height: 180px; background-size: contain; background-repeat: no-repeat; background-position: center; border-radius: 4px; margin-bottom: 15px; background-color: #050505; }
+        .gorsel-onizleme { width: 100%; height: 180px; background-size: cover; background-repeat: no-repeat; background-position: center; border-radius: 4px; margin-bottom: 15px; background-color: #1a1a1a; }
         
         .action-buttons { display: flex; gap: 10px; margin-top: auto; padding-top: 15px; }
         .btn-edit { flex: 1; padding: 8px; background: #003a66; color: #fff; border: 1px solid #005599; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
@@ -29,16 +29,11 @@
         .btn-delete { flex: 1; padding: 8px; background: #4a0000; color: #fff; border: 1px solid #6a0000; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
         .btn-delete:hover { background: #6a0000; }
         
-        /* Çoklu Önizleme Alanı Stilleri */
-        .preview-box { background:#1a1a1a; padding:5px; border:1px solid #333; border-radius:4px; text-align:center; width:110px; }
-        .preview-box img { width:100%; height:70px; object-fit:contain; margin-bottom:5px; background:#000; }
-        .preview-controls { display:flex; justify-content:space-between; margin-bottom:5px; }
-        .preview-btn { padding:2px 8px; cursor:pointer; background:#333; color:white; border:none; border-radius:3px; }
-        .preview-btn:hover { background:#555; }
+        .preview-box { background:#1a1a1a; padding:5px; border:1px solid #333; border-radius:4px; text-align:center; width:150px; margin-bottom: 20px; }
+        .preview-box img { width:100%; height:100px; object-fit:contain; margin-bottom:5px; background:#000; }
         .delete-btn { width:100%; background:#4a0000; color:white; border:none; padding:4px; font-size:10px; cursor:pointer; border-radius:3px; font-weight:bold;}
         .delete-btn:hover { background:#6a0000; }
         
-        /* Dashboard Wrapper (Sayfa yüklenirken gizli olacak) */
         #dashboardWrapper { display: none; height: 100vh; width: 100%; }
     </style>
 </head>
@@ -47,7 +42,7 @@
     <div id="dashboardWrapper">
         <div class="sidebar">
             <h2 id="formBaslik">Medya Ekle</h2>
-            <span class="status-text">Üretimin Geleceği Haber Yönetim Paneli</span>
+            <span class="status-text">Flask Sunucusuna Bağlı</span>
             
             <label>Etiket (Kategori)</label>
             <input type="text" id="etiket" placeholder="Örn: DUYURU">
@@ -56,47 +51,31 @@
             <input type="text" id="baslik" placeholder="Başlık yazın...">
             
             <label>İçerik Metni</label>
-            <textarea id="metin" rows="5" placeholder="Haber metnini girin... Her fotoğraf değiştiğinde yazının da değişmesini istiyorsanız paragrafları '---' ile ayırın."></textarea>
+            <textarea id="metin" rows="5" placeholder="Haber metnini girin..."></textarea>
             
-            <label style="color:#fff;">1. Kapak Fotoğrafı (Opsiyonel)</label>
-            <label>Seçilmezse slider'daki ilk fotoğraf vitrin fotoğrafı olur. Ana sayfada görünür, kaydırmalı fotoğrafların arasına karışmaz.</label>
+            <label style="color:#fff;">Haber Görseli</label>
+            <label>Bilgisayardan bir fotoğraf seçin.</label>
             <input type="file" id="kapakGorsel" accept="image/*">
-            <div id="kapakOnizleme" style="margin-bottom: 20px;"></div>
-            
-            <label style="color:#fff;">2. Kaydırmalı Haber Fotoğrafları (Galerİ)</label>
-            <label>Instagram gönderisi gibi sağa sola kaydırılacak ana görseller (Birden fazla seçebilirsiniz). Sırasını oklarla ayarlayın.</label>
-            <input type="file" id="galeriGorseller" accept="image/*" multiple>
-            <div id="galeriOnizleme" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 30px;"></div>
+            <div id="kapakOnizleme"></div>
             
             <button class="btn-submit" id="submitBtn" onclick="formuGonder()">YAYINLA</button>
             <button class="btn-cancel" id="iptalBtn" onclick="iptalEt()">İPTAL ET</button>
         </div>
 
         <div class="content">
-            <h3>Yayındaki İçerikler</h3>
+            <h3>Yayındaki İçerikler (Flask)</h3>
             <div class="haber-grid" id="duyuruListesi"></div>
         </div>
     </div>
 
     <script>
-        const S_URL = "https://tzdpljzkzvejdaydcwwi.supabase.co/rest/v1/duyurular";
-        const S_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6ZHBsanprenZlamRheWRjd3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDc5MjEsImV4cCI6MjA5MjI4MzkyMX0.BkSThURX33Spc2Ir5CjLpGZeueJ0pN-ZuznARP64g4s"; 
-
-        // Veri gönderirken (POST/PATCH/DELETE) kullanacağımız başlıklar
-        const gonderimAyarlari = { 
-            "apikey": S_KEY, 
-            "Authorization": `Bearer ${S_KEY}`, 
-            "Content-Type": "application/json",
-            "Prefer": "return=representation"
-        };
-
+        // Flask sunucunun adresi
+        const API_URL = "http://127.0.0.1:5000/api"; 
+        
         let tumDuyurular = [];
         let guncellenecekId = null;
+        let seciliDosya = null; // Dosyayı değişkende tutacağız
 
-        let kapakBase64 = "";
-        let galeriBase64 = [];
-
-        // Güvenli Şifre Doğrulama Yöntemi
         document.addEventListener('DOMContentLoaded', () => {
             const giris = prompt("Yönetici Şifresi:");
             if(giris !== "FOTM2026") {
@@ -107,42 +86,19 @@
             }
         });
 
-        function parseGorsel(gorselStr) {
-            if (!gorselStr) return { kapak: "", galeri: [] };
-            if (gorselStr.trim().startsWith('{')) {
-                try { return JSON.parse(gorselStr); } 
-                catch(e) { return { kapak: gorselStr, galeri: [] }; }
-            }
-            return { kapak: gorselStr, galeri: [] };
-        }
-
+        // Verileri Flask'tan Çekme (GET)
         async function duyurulariYukle() {
             try {
-                // Sadece veri çekerken (GET) kullanacağımız ayarlar
-                const okumaAyarlari = {
-                    headers: { "apikey": S_KEY, "Authorization": `Bearer ${S_KEY}` },
-                    cache: "no-store" // Tarayıcı önbelleğini kırmak için doğru yöntem
-                };
-
-                const res = await fetch(`${S_URL}?select=*&order=id.desc`, okumaAyarlari);
+                // Rastgele sayı ile cache kırıyoruz
+                const rastgeleSayi = new Date().getTime();
+                const res = await fetch(`${API_URL}/duyurular?nocache=${rastgeleSayi}`);
                 tumDuyurular = await res.json();
 
                 const listeDiv = document.getElementById('duyuruListesi');
-                
-                // Eğer Supabase'den dizi yerine hata mesajı içeren bir obje dönerse güvenliği sağla
-                if (!Array.isArray(tumDuyurular)) {
-                    console.error("Gelen veri dizi formatında değil:", tumDuyurular);
-                    listeDiv.innerHTML = '<p style="color:#ff4444;">Veritabanından beklenmeyen bir yanıt geldi. Konsolu kontrol edin.</p>';
-                    return;
-                }
-
                 listeDiv.innerHTML = tumDuyurular.length ? '' : '<p style="color:#666;">Henüz yayınlanmış bir haber yok.</p>';
 
                 tumDuyurular.forEach(d => {
-                    const pGorsel = parseGorsel(d.gorsel);
-                    const onizlemeResmi = pGorsel.kapak || (pGorsel.galeri.length > 0 ? pGorsel.galeri[0] : null);
-                    
-                    const img = onizlemeResmi ? `<div class="gorsel-onizleme" style="background-image: url('${onizlemeResmi}')"></div>` : '';
+                    const img = d.gorsel ? `<div class="gorsel-onizleme" style="background-image: url('${d.gorsel}')"></div>` : '';
                     
                     listeDiv.innerHTML += `
                         <div class="haber-card">
@@ -157,84 +113,28 @@
                 });
             } catch (e) {
                 console.error("Yükleme hatası:", e);
-                alert("Haberler yüklenirken bir hata oluştu, konsolu (F12) kontrol edin.");
+                alert("Flask sunucusuna bağlanılamadı. app.py'nin çalıştığından emin ol.");
             }
         }
 
-        /* DOSYA YÜKLEME VE ÖNİZLEME MANTIĞI */
-        document.getElementById('kapakGorsel').addEventListener('change', async (e) => {
+        // Dosya Seçimi ve Önizleme
+        document.getElementById('kapakGorsel').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
-                kapakBase64 = await fileToBase64(file);
-                renderKapak();
-            }
-        });
-
-        document.getElementById('galeriGorseller').addEventListener('change', async (e) => {
-            const files = e.target.files;
-            for(let i = 0; i < files.length; i++) {
-                const b64 = await fileToBase64(files[i]);
-                galeriBase64.push(b64);
-            }
-            renderGaleri();
-            e.target.value = ''; 
-        });
-
-        function fileToBase64(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function renderKapak() {
-            const div = document.getElementById('kapakOnizleme');
-            if (kapakBase64) {
-                div.innerHTML = `
-                    <div class="preview-box" style="width:150px;">
-                        <img src="${kapakBase64}">
+                seciliDosya = file;
+                const url = URL.createObjectURL(file); // Tarayıcıda anlık önizleme linki oluştur
+                document.getElementById('kapakOnizleme').innerHTML = `
+                    <div class="preview-box">
+                        <img src="${url}">
                         <button type="button" class="delete-btn" onclick="silKapak()">KAPAK İPTAL</button>
                     </div>`;
-            } else {
-                div.innerHTML = '';
             }
-        }
+        });
 
         function silKapak() {
-            kapakBase64 = "";
+            seciliDosya = null;
             document.getElementById('kapakGorsel').value = "";
-            renderKapak();
-        }
-
-        function renderGaleri() {
-            const div = document.getElementById('galeriOnizleme');
-            div.innerHTML = '';
-            galeriBase64.forEach((b64, index) => {
-                div.innerHTML += `
-                    <div class="preview-box">
-                        <img src="${b64}">
-                        <div class="preview-controls">
-                            <button type="button" class="preview-btn" onclick="tasGaleri(${index}, -1)">&lt;</button>
-                            <span style="font-size:11px; font-weight:bold; color:#fff; line-height:20px;">${index + 1}</span>
-                            <button type="button" class="preview-btn" onclick="tasGaleri(${index}, 1)">&gt;</button>
-                        </div>
-                        <button type="button" class="delete-btn" onclick="silGaleri(${index})">SİL</button>
-                    </div>`;
-            });
-        }
-
-        function tasGaleri(index, yon) {
-            if (index + yon < 0 || index + yon >= galeriBase64.length) return;
-            const temp = galeriBase64[index];
-            galeriBase64[index] = galeriBase64[index + yon];
-            galeriBase64[index + yon] = temp;
-            renderGaleri();
-        }
-
-        function silGaleri(index) {
-            galeriBase64.splice(index, 1);
-            renderGaleri();
+            document.getElementById('kapakOnizleme').innerHTML = '';
         }
 
         function duzenlemeModunaGec(id) {
@@ -246,15 +146,17 @@
             document.getElementById('etiket').value = d.etiket || '';
             document.getElementById('baslik').value = d.baslik || '';
             document.getElementById('metin').value = d.metin || '';
-            document.getElementById('kapakGorsel').value = ''; 
-            document.getElementById('galeriGorseller').value = ''; 
             
-            const pGorsel = parseGorsel(d.gorsel);
-            kapakBase64 = pGorsel.kapak || "";
-            galeriBase64 = pGorsel.galeri || [];
-            
-            renderKapak();
-            renderGaleri();
+            silKapak(); // Mevcut yükleme inputunu sıfırla
+
+            // Eğer sunucuda fotoğrafı varsa önizlemesini göster
+            if (d.gorsel) {
+                document.getElementById('kapakOnizleme').innerHTML = `
+                    <div class="preview-box">
+                        <img src="${d.gorsel}">
+                        <span style="font-size:10px; color:#aaa;">(Mevcut Görsel)</span>
+                    </div>`;
+            }
             
             document.getElementById('submitBtn').innerText = "GÜNCELLE";
             document.getElementById('iptalBtn').style.display = "block";
@@ -268,72 +170,67 @@
             document.getElementById('etiket').value = '';
             document.getElementById('baslik').value = '';
             document.getElementById('metin').value = '';
-            document.getElementById('kapakGorsel').value = '';
-            document.getElementById('galeriGorseller').value = '';
-            
-            kapakBase64 = "";
-            galeriBase64 = [];
-            renderKapak();
-            renderGaleri();
+            silKapak();
             
             document.getElementById('submitBtn').innerText = "YAYINLA";
             document.getElementById('iptalBtn').style.display = "none";
         }
 
+        // Verileri Flask'a Gönderme (POST via FormData)
         async function formuGonder() {
             const submitBtn = document.getElementById('submitBtn');
-
             submitBtn.innerText = "İŞLENİYOR...";
             submitBtn.disabled = true;
 
-            const veri = {
-                etiket: document.getElementById('etiket').value,
-                baslik: document.getElementById('baslik').value,
-                metin: document.getElementById('metin').value
-            };
-
-            if (!kapakBase64 && galeriBase64.length === 0) {
-                veri.gorsel = "";
-            } else {
-                veri.gorsel = JSON.stringify({ kapak: kapakBase64, galeri: galeriBase64 });
+            // Form-data oluşturuyoruz (app.py form verisi bekliyor, JSON değil)
+            const formData = new FormData();
+            formData.append('etiket', document.getElementById('etiket').value);
+            formData.append('baslik', document.getElementById('baslik').value);
+            formData.append('metin', document.getElementById('metin').value);
+            
+            if (seciliDosya) {
+                formData.append('gorsel', seciliDosya);
             }
 
-            let fetchUrl = S_URL;
-            let fetchMethod = 'POST';
-
+            let fetchUrl = `${API_URL}/duyuru-ekle`;
+            
+            // Eğer düzenleme modundaysak Flask'taki düzenleme rotasına POST atıyoruz
             if (guncellenecekId !== null) {
-                fetchUrl = `${S_URL}?id=eq.${guncellenecekId}`;
-                fetchMethod = 'PATCH';
+                fetchUrl = `${API_URL}/duyuru-duzenle/${guncellenecekId}`;
             }
 
             try {
                 const res = await fetch(fetchUrl, { 
-                    method: fetchMethod, 
-                    headers: gonderimAyarlari, 
-                    body: JSON.stringify(veri) 
+                    method: 'POST', 
+                    body: formData // JSON stringify yapmıyoruz, doğrudan formu basıyoruz
                 });
 
                 if(res.ok) {
                     alert(guncellenecekId ? "Haber başarıyla güncellendi!" : "Haber başarıyla yayınlandı!");
-                    location.reload();
+                    iptalEt();
+                    duyurulariYukle();
                 } else {
                     const err = await res.json();
-                    alert("Hata: " + err.message);
-                    submitBtn.innerText = guncellenecekId ? "GÜNCELLE" : "YAYINLA";
-                    submitBtn.disabled = false;
+                    alert("Hata: " + (err.hata || "Sunucu reddetti"));
                 }
             } catch (err) {
-                alert("Bağlantı hatası yaşandı!");
+                alert("Flask sunucusuna bağlanılamadı!");
+            } finally {
                 submitBtn.innerText = guncellenecekId ? "GÜNCELLE" : "YAYINLA";
                 submitBtn.disabled = false;
             }
         }
 
+        // Flask'tan Veri Silme (DELETE)
         async function duyuruSil(id) {
             if(confirm('Silmek istediğine emin misin?')) {
-                await fetch(`${S_URL}?id=eq.${id}`, { method: 'DELETE', headers: gonderimAyarlari });
-                duyurulariYukle();
-                if(guncellenecekId === id) iptalEt();
+                try {
+                    await fetch(`${API_URL}/duyuru-sil/${id}`, { method: 'DELETE' });
+                    duyurulariYukle();
+                    if(guncellenecekId === id) iptalEt();
+                } catch (e) {
+                    alert("Silinirken hata oluştu.");
+                }
             }
         }
     </script>
