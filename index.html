@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Üretimin Geleceği Öğrenci Topluluğu</title>
     
+    <link rel="icon" type="image/png" href="logo/uretimingelecegilogo.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
@@ -28,6 +30,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            /* Scroll behavior js ile yönetilecek, ancak yedek olarak kalabilir */
             scroll-behavior: smooth;
         }
 
@@ -102,6 +105,7 @@
             font-size: 14px;
             font-weight: 500;
             transition: color 0.3s ease;
+            cursor: pointer;
         }
 
         .nav-links > a.text-link:hover {
@@ -213,6 +217,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            cursor: pointer;
         }
 
         .btn-primary {
@@ -393,18 +398,20 @@
         .board-img-wrapper {
             width: 100%;
             height: 320px;
-            background: #050505;
+            background: #111; /* Resim olmayanlar veya saydam PNG'ler için temiz arkaplan */
             overflow: hidden;
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            align-items: center; /* Merkeze hizalama */
             border-bottom: 1px solid var(--border-color);
         }
 
+        /* Tüm resimlerin aynı uzaklıkta ve hizalamada görünmesi için */
         .board-img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: top; /* Yüzlerin görünmesi için yukarıdan hizalama */
             transition: transform 0.5s ease, filter 0.5s ease;
             filter: grayscale(15%);
         }
@@ -712,8 +719,8 @@
             border: 1px solid var(--border-color);
             width: 90%;
             max-width: 800px;
-            max-height: 90vh; /* Ekrana sığması için */
-            overflow-y: auto; /* Uzun metinlerde aşağı kaydırma eklendi */
+            max-height: 90vh;
+            overflow-y: auto; 
             border-radius: 12px;
             position: relative;
             padding: 40px;
@@ -827,11 +834,11 @@
             <img src="logo/uretimingelecegilogo.png" alt="Üretimin Geleceği Logo">
         </div>
         <div class="nav-links">
-            <a href="#hero" class="text-link">Ana Sayfa</a>
-            <a href="#hakkimizda" class="text-link">Kurumsal Kimlik</a>
-            <a href="#yonetim-kurulu" class="text-link">Yönetim Kurulu</a>
-            <a href="#fotm-takimi" class="text-link">FOT-M Takımı</a>
-            <a href="#arge" class="text-link">Çalışma Alanları</a>
+            <a href="#hero" class="text-link smooth-scroll">Ana Sayfa</a>
+            <a href="#hakkimizda" class="text-link smooth-scroll">Kurumsal Kimlik</a>
+            <a href="#yonetim-kurulu" class="text-link smooth-scroll">Yönetim Kurulu</a>
+            <a href="#fotm-takimi" class="text-link smooth-scroll">FOT-M Takımı</a>
+            <a href="#arge" class="text-link smooth-scroll">Çalışma Alanları</a>
             
             <div class="nav-icons">
                 <a href="https://www.instagram.com/subuuretimingelecegi/" target="_blank" aria-label="Instagram">
@@ -840,7 +847,7 @@
                 <a href="https://www.linkedin.com/company/uretimingelecegi-subu/" target="_blank" aria-label="LinkedIn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                 </a>
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uretimingelecegi@gmail.com" target="_blank" aria-label="E-posta">
+                <a href="mailto:uretimingelecegi@gmail.com" aria-label="E-posta">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                 </a>
             </div>
@@ -854,7 +861,7 @@
         <p class="desc">Sakarya Uygulamalı Bilimler Üniversitesi bünyesinde teorik bilgiyi pratiğe dönüştüren; Endüstri 4.0 ve otomasyon sistemleri odaklı projeler geliştiren öğrenci topluluğuyuz.</p>
         
         <div class="hero-buttons">
-            <a href="#hakkimizda" class="btn btn-primary">BİZİ TANIYIN</a>
+            <a href="#hakkimizda" class="btn btn-primary smooth-scroll">BİZİ TANIYIN</a>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSf7tYTZ3Wy6WZc64zi3DsCpmwAchU1Be7CKoMNG221JLivJig/viewform?usp=dialog" target="_blank" class="btn btn-secondary">TOPLULUĞA KATIL</a>
         </div>
     </section>
@@ -887,7 +894,6 @@
         </div>
     </section>
 
-    <!-- YÖNETİM KURULU BÖLÜMÜ -->
     <section id="yonetim-kurulu" class="section-wrapper">
         <div class="container">
             <div class="section-header fade-in">
@@ -898,7 +904,6 @@
 
             <div class="board-container">
                 
-                <!-- Akademik Danışman -->
                 <div class="board-top fade-in">
                     <div class="board-card advisor-card">
                         <div class="board-img-wrapper">
@@ -908,7 +913,10 @@
                             <h4 class="board-name">Serkan Mutlu</h4>
                             <span class="board-title">Akademik Danışman</span>
                             <div class="board-social">
-                                <a href="mailto:serkanmutlu@subu.edu.tr" target="_blank" class="email-btn" aria-label="E-posta">
+                                <a href="https://www.linkedin.com/in/sekovic/" target="_blank" aria-label="LinkedIn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                </a>
+                                <a href="mailto:serkanmutlu@subu.edu.tr" class="email-btn" aria-label="E-posta">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                                 </a>
                             </div>
@@ -916,11 +924,10 @@
                     </div>
                 </div>
 
-                <!-- Kurucu Başkan -->
                 <div class="board-top fade-in">
                     <div class="board-card founder-card">
                         <div class="board-img-wrapper">
-                            <img src="muhammedardasari.png" alt="Muhammed Arda Sarı">
+                            <img src="muhammedardasari.jpg" alt="Muhammed Arda Sarı">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Muhammed Arda Sarı</h4>
@@ -929,7 +936,7 @@
                                 <a href="https://www.linkedin.com/in/muhammed-arda-sar%C4%B1-009554335/" target="_blank" aria-label="LinkedIn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                                 </a>
-                                <a href="mailto:sarimuhammedarda52@gmail.com" target="_blank" class="email-btn" aria-label="E-posta">
+                                <a href="mailto:sarimuhammedarda52@gmail.com" class="email-btn" aria-label="E-posta">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                                 </a>
                             </div>
@@ -937,12 +944,10 @@
                     </div>
                 </div>
 
-                <!-- Yönetim Ekibi (Alt Izgara) -->
                 <div class="board-grid fade-in">
-                    <!-- Emirhan -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
-                            <img src="emirhansenel.png" alt="Emirhan Şenel">
+                            <img src="emirhansenel.jpg" alt="Emirhan Şenel">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Emirhan Şenel</h4>
@@ -951,17 +956,16 @@
                                 <a href="https://www.linkedin.com/in/emirhan-%C5%9Fenel-651824300/" target="_blank" aria-label="LinkedIn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                                 </a>
-                                <a href="mailto:esenel445@gmail.com" target="_blank" class="email-btn" aria-label="E-posta">
+                                <a href="mailto:esenel445@gmail.com" class="email-btn" aria-label="E-posta">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Mustafa -->
                     <div class="board-card">
-                        <div class="board-img-wrapper" style="background: #1a1a1a;">
-                            <img src="1.png" alt="Mustafa Can Demir" style="object-fit: contain; padding: 20px;">
+                        <div class="board-img-wrapper">
+                            <img src="1.png" alt="Mustafa Can Demir">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Mustafa Can Demir</h4>
@@ -970,17 +974,16 @@
                                 <a href="http://linkedin.com/in/mustafa-can-demir-314296399/" target="_blank" aria-label="LinkedIn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                                 </a>
-                                <a href="mailto:mustafacandmrr@gmail.com" target="_blank" class="email-btn" aria-label="E-posta">
+                                <a href="mailto:mustafacandmrr@gmail.com" class="email-btn" aria-label="E-posta">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Mehmet -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
-                            <img src="mehmetceran.png" alt="Mehmet Ceran">
+                            <img src="mehmetceran.jpg" alt="Mehmet Ceran">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Mehmet Ceran</h4>
@@ -989,23 +992,22 @@
                                 <a href="https://www.linkedin.com/in/mehmetceran-428187368/" target="_blank" aria-label="LinkedIn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                                 </a>
-                                <a href="mailto:ceranmehmet08@gmail.com" target="_blank" class="email-btn" aria-label="E-posta">
+                                <a href="mailto:ceranmehmet08@gmail.com" class="email-btn" aria-label="E-posta">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- İlker (LinkedIn yok) -->
                     <div class="board-card">
-                        <div class="board-img-wrapper" style="background: #1a1a1a;">
-                            <img src="1.png" alt="İlker Kurtini" style="object-fit: contain; padding: 20px;">
+                        <div class="board-img-wrapper">
+                            <img src="1.png" alt="İlker Kurtini">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">İlker Kurtini</h4>
                             <span class="board-title">Yönetim Kurulu Üyesi</span>
                             <div class="board-social">
-                                <a href="mailto:ftnhilker@gmail.com" target="_blank" class="email-btn" aria-label="E-posta">
+                                <a href="mailto:ftnhilker@gmail.com" class="email-btn" aria-label="E-posta">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                                 </a>
                             </div>
@@ -1104,7 +1106,17 @@
         let globalDuyurular = [];
         let swiperInstance = null;
 
-        // Haber Dışı Arkaplana (Siyah Alana) Tıklayınca Modalı Kapatma
+        document.querySelectorAll('.smooth-scroll').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if(targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
         document.getElementById('newsModal').addEventListener('click', function(event) {
             if (event.target === this) {
                 closeModal();
@@ -1136,7 +1148,6 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Veri Çekme Format Çözücü Yardımcı Fonksiyon
         function parseGorselData(gorselStr) {
             if (!gorselStr) return { kapak: "", galeri: [] };
             if (gorselStr.trim().startsWith('{')) {
@@ -1146,10 +1157,9 @@
                     return { kapak: gorselStr, galeri: [] };
                 }
             }
-            return { kapak: gorselStr, galeri: [] }; // Eski düz metin formatına geriye dönük uyumluluk
+            return { kapak: gorselStr, galeri: [] };
         }
 
-        // HABER MODALI AÇMA FONKSİYONU
         function openModal(id) {
             const duyuru = globalDuyurular.find(d => d.id === id);
             if(!duyuru) return;
@@ -1158,16 +1168,11 @@
             wrapper.innerHTML = '';
 
             const pGorsel = parseGorselData(duyuru.gorsel);
-            
-            // Eğer galeri varsa sadece galeriyi kullan. 
-            // Eğer galeri yoksa (eski post) kapak resmini tek başına göster.
             const imagesToUse = pGorsel.galeri && pGorsel.galeri.length > 0 ? pGorsel.galeri : (pGorsel.kapak ? [pGorsel.kapak] : []);
             
             const texts = duyuru.metin ? duyuru.metin.split('---') : [];
             const slideCount = Math.max(texts.length, imagesToUse.length);
 
-            // Instagram benzeri slider kurgusu: Fotoğraflar ve textleri birleştir.
-            // Text bittiyse sadece foto, foto bittiyse sadece text kaymaya devam eder.
             for (let i = 0; i < slideCount; i++) {
                 let textPart = texts[i] ? texts[i].trim() : '';
                 let imgPart = imagesToUse[i] ? imagesToUse[i] : '';
@@ -1230,7 +1235,6 @@
                     
                     duyurular.forEach(duyuru => {
                         const pGorsel = parseGorselData(duyuru.gorsel);
-                        // Kapak fotoğrafı yoksa 1. fotoğrafı kapak yap
                         const gridCoverImg = pGorsel.kapak || (pGorsel.galeri.length > 0 ? pGorsel.galeri[0] : "");
 
                         const img = gridCoverImg 
