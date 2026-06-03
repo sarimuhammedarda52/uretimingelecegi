@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Üretimin Geleceği Topluluğu</title>
     
-    <!-- Sekme Logosu (Favicon) -->
     <link rel="icon" id="favicon" type="image/png" href="logo/uretimingelecegilogo.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -902,7 +901,6 @@
         </div>
     </section>
 
-    <!-- YÖNETİM KURULU BÖLÜMÜ -->
     <section id="yonetim-kurulu" class="section-wrapper">
         <div class="container">
             <div class="section-header fade-in">
@@ -913,7 +911,6 @@
 
             <div class="board-container">
                 
-                <!-- Akademik Danışman -->
                 <div class="board-top fade-in">
                     <div class="board-card advisor-card">
                         <div class="board-img-wrapper">
@@ -934,7 +931,6 @@
                     </div>
                 </div>
 
-                <!-- Kurucu Başkan -->
                 <div class="board-top fade-in">
                     <div class="board-card founder-card">
                         <div class="board-img-wrapper">
@@ -955,9 +951,7 @@
                     </div>
                 </div>
 
-                <!-- Yönetim Ekibi (Alt Izgara) -->
                 <div class="board-grid fade-in">
-                    <!-- Emirhan -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
                             <img src="emirhansenel.png" alt="Emirhan Şenel">
@@ -976,7 +970,6 @@
                         </div>
                     </div>
 
-                    <!-- Mustafa -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
                             <img src="mustafacandemir.jpg" alt="Mustafa Can Demir">
@@ -995,7 +988,6 @@
                         </div>
                     </div>
 
-                    <!-- Mehmet -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
                             <img src="mehmetceran.png" alt="Mehmet Ceran">
@@ -1014,7 +1006,6 @@
                         </div>
                     </div>
 
-                    <!-- İlker (LinkedIn yok) -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
                             <img src="ilkerkurtini.jpg" alt="İlker Kurtini">
@@ -1131,14 +1122,15 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
+        // Eksik değişkenleri global olarak tanımlıyoruz ki Swiper başlarken çökmesin
+        let swiperInstance = null;
+        let globalDuyurular = [];
+
         // Akıllı Mail Yönlendirme Fonksiyonu
         function mailGonder(email) {
-            // Cihazın mobil olup olmadığını kontrol et
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                // Mobildeyse cihazın orijinal mail uygulamasını (Apple Mail, vb.) aç
                 window.location.href = "mailto:" + email;
             } else {
-                // Bilgisayardaysa direkt web tarayıcısında Gmail'in mail yazma ekranını aç
                 window.open("https://mail.google.com/mail/?view=cm&fs=1&to=" + email, "_blank");
             }
         }
@@ -1258,7 +1250,11 @@
 
             document.getElementById('newsModal').classList.add('active');
 
-            if(swiperInstance) swiperInstance.destroy();
+            // Eğer önceki bir swiperInstance varsa onu temizliyoruz
+            if(swiperInstance) {
+                swiperInstance.destroy(true, true);
+            }
+            // Ve yeniden başlatıyoruz
             swiperInstance = new Swiper(".mySwiper", {
                 navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
                 pagination: { el: ".swiper-pagination", clickable: true },
