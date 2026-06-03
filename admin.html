@@ -82,7 +82,8 @@
         const S_URL = "https://tzdpljzkzvejdaydcwwi.supabase.co/rest/v1/duyurular";
         const S_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6ZHBsanprenZlamRheWRjd3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3MDc5MjEsImV4cCI6MjA5MjI4MzkyMX0.BkSThURX33Spc2Ir5CjLpGZeueJ0pN-ZuznARP64g4s"; 
 
-        const headers = { 
+        // Veri gönderirken (POST/PATCH) kullanacağımız başlıklar
+        const gonderimAyarlari = { 
             "apikey": S_KEY, 
             "Authorization": `Bearer ${S_KEY}`, 
             "Content-Type": "application/json",
@@ -117,15 +118,27 @@
 
         async function duyurulariYukle() {
             try {
-                // Sadece okuma için gereken temel anahtarları gönderiyoruz (index.html'deki gibi)
+                // Tarayıcının önbelleğini zorla kırıp güncel veriyi getirmesi için rastgele bir parametre ekliyoruz
+                const rastgeleSayi = new Date().getTime();
+
+                // Sadece veri çekerken (GET) kullanacağımız ayarlar
                 const okumaAyarlari = {
-                    headers: { "apikey": S_KEY, "Authorization": `Bearer ${S_KEY}` }
+                    headers: { "apikey": S_KEY, "Authorization": `Bearer ${S_KEY}` },
+                    cache: "no-store" // Tarayıcıya kesin bir dille cache KULLANMA diyoruz
                 };
 
-                const res = await fetch(`${S_URL}?select=*&order=id.desc`, okumaAyarlari);
+                const res = await fetch(`${S_URL}?select=*&order=id.desc&nocache=${rastgeleSayi}`, okumaAyarlari);
                 tumDuyurular = await res.json();
 
                 const listeDiv = document.getElementById('duyuruListesi');
+                
+                // Eğer Supabase'den dizi yerine hata mesajı içeren bir obje dönerse güvenliği sağla
+                if (!Array.isArray(tumDuyurular)) {
+                    console.error("Gelen veri dizi formatında değil:", tumDuyurular);
+                    listeDiv.innerHTML = '<p style="color:#ff4444;">Veritabanından beklenmeyen bir yanıt geldi. Konsolu kontrol edin.</p>';
+                    return;
+                }
+
                 listeDiv.innerHTML = tumDuyurular.length ? '' : '<p style="color:#666;">Henüz yayınlanmış bir haber yok.</p>';
 
                 tumDuyurular.forEach(d => {
@@ -147,7 +160,7 @@
                 });
             } catch (e) {
                 console.error("Yükleme hatası:", e);
-                alert("Haberler yüklenirken bir hata oluştu, konsolu kontrol edin.");
+                alert("Haberler yüklenirken bir hata oluştu, konsolu (F12) kontrol edin.");
             }
         }
 
@@ -299,7 +312,7 @@
             try {
                 const res = await fetch(fetchUrl, { 
                     method: fetchMethod, 
-                    headers: headers, 
+                    headers: gonderimAyarlari, 
                     body: JSON.stringify(veri) 
                 });
 
@@ -321,7 +334,7 @@
 
         async function duyuruSil(id) {
             if(confirm('Silmek istediğine emin misin?')) {
-                await fetch(`${S_URL}?id=eq.${id}`, { method: 'DELETE', headers });
+                await fetch(`${S_URL}?id=eq.${id}`, { method: 'DELETE', headers: gonderimAyarlari });
                 duyurulariYukle();
                 if(guncellenecekId === id) iptalEt();
             }
