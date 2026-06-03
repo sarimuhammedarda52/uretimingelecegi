@@ -936,7 +936,7 @@
                 <div class="board-top fade-in">
                     <div class="board-card founder-card">
                         <div class="board-img-wrapper">
-                            <img src="muhammedardasari_3.jpg" alt="Muhammed Arda Sarı">
+                            <img src="muhammedardasari_4.jpg" alt="Muhammed Arda Sarı">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Muhammed Arda Sarı</h4>
@@ -958,7 +958,7 @@
                     <!-- Emirhan -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
-                            <img src="emirhansenel_2.jpg" alt="Emirhan Şenel">
+                            <img src="emirhansenel_3.jpg" alt="Emirhan Şenel">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Emirhan Şenel</h4>
@@ -996,7 +996,7 @@
                     <!-- Mehmet -->
                     <div class="board-card">
                         <div class="board-img-wrapper">
-                            <img src="mehmetceran_2.jpg" alt="Mehmet Ceran">
+                            <img src="mehmetceran_3.jpg" alt="Mehmet Ceran">
                         </div>
                         <div class="board-info">
                             <h4 class="board-name">Mehmet Ceran</h4>
@@ -1120,10 +1120,9 @@
         let globalDuyurular = [];
         let swiperInstance = null;
 
-        // Hash'siz pürüzsüz kaydırma (Linkte #hero vb. görünmesini engeller)
+        // Hash'siz pürüzsüz kaydırma
         document.querySelectorAll('.smooth-scroll').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                // Eğer href linki "mailto:" veya dış bir siteye ("http") gidiyorsa engelleme!
                 const href = this.getAttribute('href');
                 if (href.startsWith('mailto:') || href.startsWith('http')) {
                     return; 
@@ -1134,7 +1133,6 @@
                 const targetElement = document.getElementById(targetId);
                 if(targetElement) {
                     targetElement.scrollIntoView({ behavior: 'smooth' });
-                    // URL'den hash (#) kısmını temizle
                     history.replaceState(null, null, ' ');
                 }
             });
@@ -1161,7 +1159,7 @@
             }
         });
 
-        // Haber Dışı Arkaplana (Siyah Alana) Tıklayınca Modalı Kapatma
+        // Haber Dışı Arkaplana Tıklayınca Modalı Kapatma
         document.getElementById('newsModal').addEventListener('click', function(event) {
             if (event.target === this) {
                 closeModal();
